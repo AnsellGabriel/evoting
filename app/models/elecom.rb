@@ -1,0 +1,2 @@
+class Elecom < ApplicationRecord
+end

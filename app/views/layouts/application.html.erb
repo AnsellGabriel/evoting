@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Evoting</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "custom", "data-turbo-track": "reload" %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <%= javascript_importmap_tags %>
+  </head>
+  <body>
+    <%#= puts "@@@@@@ #{params[:controller]}" %>
+     <%= render partial: '/layouts/navbar' unless params[:controller] == 'pages' || params[:controller] ==  'registrations' || params[:controller] ==  'elections' || params[:controller] == 'votes' %>
+     <div class=" <%= "container mt-3" unless params[:controller] == 'pages' || params[:controller] ==  'elections' %> ">
+      <%= yield %>
+      <%= turbo_frame_tag "remote_modal", target: "_top" %>
+    </div>
+  </body>
+</html>

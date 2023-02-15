@@ -1,0 +1,16 @@
+<%# 
+<div class="card">
+  <div class="card-header">
+  <h5>Add candidate</h5>
+  
+  </div>
+
+  <div class="card-body"> %>
+    <%#= render "form", candidate: @candidate %>
+  <%# </div>
+</div> %>
+
+<%= render "remote_modal", title: "Candidate" do %>
+  <%#= render "form_modal", registration: @registration %>
+  <%= render "form", url: candidates_path(v: @event), meth: 'post' %>
+<% end %>

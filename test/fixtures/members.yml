@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  event: one
+  name: MyString
+  description: MyString
+  area: MyString
+  voted: false
+  vote_date: 2023-02-13 16:25:13
+  station: MyString
+
+two:
+  event: two
+  name: MyString
+  description: MyString
+  area: MyString
+  voted: false
+  vote_date: 2023-02-13 16:25:13
+  station: MyString

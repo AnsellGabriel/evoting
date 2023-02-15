@@ -1,0 +1,41 @@
+<%= content_tag :h1, "List of Elecoms" %>
+
+
+<div class="text-end mb-3">
+  <%= link_to new_elecom_path, class: 'btn btn-primary' do %>
+    New Elecom
+  <% end %>
+</div>
+
+<table class ="table table-striped">
+  <table class="table table-borderless table-hover">
+    <thead>
+      <tr class="border-top border-bottom border-primary">
+
+      <th>#</th>
+        <th class="text-primary">Name</th>
+        <th class="text-primary">Position</th>
+        <th></th>
+
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @elecoms.each do |elecom| %>
+        <tr>
+
+        <th scope="row"><%= elecom.id %></th>
+        <td><%= elecom.name %></td>
+        <td><%= elecom.position %></td>
+    
+          <td>
+            <%= link_to 'View', elecom, class: 'btn btn-secondary btn-sm' %>
+            <%= link_to 'Edit', edit_elecom_path(elecom), class: 'btn btn-secondary btn-sm' %>
+            <%= link_to "Delete", elecom, class: "btn btn-danger btn-sm", method: :delete, data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>
+          </td>
+
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,19 @@
+
+<%= simple_form_for(@vote) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <%= f.association :event %>
+    <%= f.association :candidate %>
+    <%= f.association :member %>
+    <%= f.association :position %>
+    <%= f.input :vote_amount %>
+    <%= f.input :station %>
+  </div>
+
+  <div class="form-actions text-end">
+    <%= link_to "Back", votes_path, class: "btn btn-secondary" %>
+    <%= f.button :submit, class: "btn btn-success" %>
+  </div>
+<% end %>

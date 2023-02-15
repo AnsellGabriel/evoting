@@ -1,0 +1,10 @@
+<%= turbo_stream.update "remote_modal_body" do %>
+    <%# if params[:p] == "create" %>
+        <%#= render "form", url: positions_path(v: @event), meth: 'post' %>
+    <%# elsif params[:p] == "update" %>
+        <%#= render "form", url: position_path(@position), meth: 'patch' %>
+    <%# end %>
+  <%#= render "form", item: @item %>
+  <%= render "form", url: positions_path(v: @position), meth: 'post' %>
+  <%# <%= render "form", url: benefit_claims_path(v: @process_claim), meth: 'post' %> 
+<% end %>

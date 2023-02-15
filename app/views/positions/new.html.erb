@@ -1,0 +1,15 @@
+
+<%# <div class="card">
+  <div class="card-header">
+  <h5>Add position</h5>
+  
+  </div>
+
+  <div class="card-body"> %>
+    <%#= render "form", position: @position %>
+  <%# </div>
+</div> %>
+<%= render "remote_modal", title: "Position" do %>
+  <%#= render "form_modal", registration: @registration %>
+  <%= render "form", url: positions_path(v: @event), meth: 'post' %>
+<% end %>

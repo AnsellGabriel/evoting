@@ -1,0 +1,15 @@
+<div class="container">
+  <div class="card mb-3 mt-5">
+    <div class="card-header">Election</div>
+    <div class="card-body">
+      <%= content_tag :h3, @member.name %>
+      <%= content_tag :h5, @member.description %>
+    </div>
+  </div>
+  <div class="text-end">
+    <%= content_tag :h3, @position.name, class: "text-primary" %>
+    <div class="alert alert-info" role="alert">
+      <%= content_tag :h5, "Please vote for #{@position.vacant} candidate(s) " %>
+    </div>
+  </div>
+</div>

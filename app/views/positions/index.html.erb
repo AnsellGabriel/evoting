@@ -1,0 +1,43 @@
+<%= content_tag :h1, "List of Positions" %>
+
+
+<div class="text-end mb-3">
+  <%= link_to new_position_path, class: 'btn btn-primary' do %>
+    New Position
+  <% end %>
+</div>
+
+<table class ="table table-striped">
+  <table class="table table-borderless table-hover">
+    <thead>
+      <tr class="border-top border-bottom border-primary">
+
+      <th>#</th>
+        <th class="text-primary">Event</th>
+        <th class="text-primary">Name</th>
+        <th class="text-primary">Vacant</th>
+        <th></th>
+
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @positions.each do |position| %>
+        <tr>
+
+        <th scope="row"><%= position.id %></th>
+        <td><%= position.event %></td>
+        <td><%= position.name %></td>
+        <td><%= position.vacant %></td>
+    
+          <td>
+            <%= link_to 'View', position, class: 'btn btn-secondary btn-sm' %>
+            <%= link_to 'Edit', edit_position_path(position), class: 'btn btn-secondary btn-sm' %>
+            <%= link_to "Delete", position, class: "btn btn-danger btn-sm", method: :delete, data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>
+          </td>
+
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

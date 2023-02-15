@@ -1,0 +1,16 @@
+
+<%= simple_form_for(@position, url: url, method: meth) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <%#= f.association :event %>
+    <%= f.input :name %>
+    <%= f.input :vacant %>
+  </div>
+
+  <div class="form-actions text-end">
+    <%= link_to "Back", @event, class: "btn btn-secondary" %>
+    <%= f.button :submit, class: "btn btn-success" %>
+  </div>
+<% end %>

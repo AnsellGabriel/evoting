@@ -1,0 +1,45 @@
+<%= content_tag :h1, "List of Candidates" %>
+
+
+<div class="text-end mb-3">
+  <%= link_to new_candidate_path, class: 'btn btn-primary' do %>
+    New Candidate
+  <% end %>
+</div>
+
+<table class ="table table-striped">
+  <table class="table table-borderless table-hover">
+    <thead>
+      <tr class="border-top border-bottom border-primary">
+
+      <th>#</th>
+        <th class="text-primary">Event</th>
+        <th class="text-primary">Position</th>
+        <th class="text-primary">Name</th>
+        <th class="text-primary">Remark</th>
+        <th></th>
+
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @candidates.each do |candidate| %>
+        <tr>
+
+        <th scope="row"><%= candidate.id %></th>
+        <td><%= candidate.event %></td>
+        <td><%= candidate.position %></td>
+        <td><%= candidate.name %></td>
+        <td><%= candidate.remark %></td>
+    
+          <td>
+            <%= link_to 'View', candidate, class: 'btn btn-secondary btn-sm' %>
+            <%= link_to 'Edit', edit_candidate_path(candidate), class: 'btn btn-secondary btn-sm' %>
+            <%= link_to "Delete", candidate, class: "btn btn-danger btn-sm", method: :delete, data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>
+          </td>
+
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
