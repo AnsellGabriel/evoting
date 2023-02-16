@@ -16,7 +16,7 @@ set :rbenv_path, '/home/deploy/.rbenv' #
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', '.bundle', 'public/system', 'public/uploads'
 
 
-append :linked_files,  'config/credentials/production.key'
+# append :linked_files,  'config/credentials/production.key'
 append :linked_files, "config/database.yml", "config/secrets.yml"
  
 namespace :deploy do  #

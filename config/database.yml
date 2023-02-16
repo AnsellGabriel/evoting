@@ -50,6 +50,6 @@ test:
 #
 production:
   <<: *default
-  database: Evoting_production
-  username: Evoting
-  password: <%= ENV["EVOTING_DATABASE_PASSWORD"] %>
+  database: Evoting
+  username: deploy
+  password: 1CISPfamily1974!
