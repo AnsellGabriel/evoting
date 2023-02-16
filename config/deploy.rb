@@ -8,6 +8,8 @@ set :branch, 'main' #
 
 # Deploy to the user's home directory
 set :deploy_to, "/home/deploy/#{fetch :application}"
+
+set :rbenv_type, :user #
 set :rbenv_ruby, '3.0.3' #
 set :rbenv_path, '/home/deploy/.rbenv' # 
 
