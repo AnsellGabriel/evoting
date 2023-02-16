@@ -50,6 +50,6 @@ test:
 #
 production:
   <<: *default
-  database: Evoting
+  database: evoting
   username: deploy
   password: 1CISPfamily1974!
