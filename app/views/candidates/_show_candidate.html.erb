@@ -2,8 +2,8 @@
   <thead>
     <tr class="border-top border-bottom border-primary">
       <%# <th class="text-primary"></th> %>
+      <th></th>
       <th class="text-primary">Name</th>
-      <th class="text-primary">Position</th>
       <th></th>
     </tr>
   </thead>
@@ -11,8 +11,11 @@
     <% @event.candidates.each do |candidate| %>
       <tr>
         <%# <th scope="row">= claim_document.id</th> %>
-        <td><%= candidate.name %></td>
-        <td><%= candidate.position %></td>
+        <td><%= image_tag candidate.picture, width: "50%", height: "50" if candidate.picture.attached? %></td>
+        <td>
+          <strong><%= candidate.name %></strong> <br>
+          <small><%= candidate.position %></small>
+        </td>
         <td>
           <%= link_to '<i class="bi bi-pencil-square"></i>'.html_safe, edit_candidate_path(candidate), class: 'btn btn-outline-primary btn-sm', data: { turbo_frame: "remote_modal" } %>
           <%= link_to '<i class="bi bi-trash3"></i>'.html_safe, candidate, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %>
