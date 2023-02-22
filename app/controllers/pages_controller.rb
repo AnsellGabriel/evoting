@@ -25,7 +25,10 @@ class PagesController < ApplicationController
     def vote 
       @member = Member.find(params[:i])
       @position = Position.find(params[:p])
+      @event = Event.find(@member.event_id)
+      @candidates = Candidate.where(position: @position, event: @event).shuffle
     end
+  
     private
     # Use callbacks to share common setup or constraints between actions.
     def set_member

@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  resources :votes
+  resources :votes do 
+    get "save_vote", to: 'votes#save_vote', on: :collection
+  end
   resources :candidates
   resources :elecoms
   resources :members

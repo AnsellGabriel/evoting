@@ -13,10 +13,8 @@
       <tr class="border-top border-bottom border-primary">
 
       <th>#</th>
-        <th class="text-primary">Event</th>
-        <th class="text-primary">Position</th>
-        <th class="text-primary">Name</th>
-        <th class="text-primary">Remark</th>
+        <th class="text-primary">Canidate</th>
+        
         <th></th>
 
       </tr>
@@ -27,10 +25,10 @@
         <tr>
 
         <th scope="row"><%= candidate.id %></th>
-        <td><%= candidate.event %></td>
-        <td><%= candidate.position %></td>
-        <td><%= candidate.name %></td>
-        <td><%= candidate.remark %></td>
+         <td>
+          <strong><%= candidate.name %></strong> <br>
+          <small><%= candidate.position %></small>
+        </td>
     
           <td>
             <%= link_to 'View', candidate, class: 'btn btn-secondary btn-sm' %>

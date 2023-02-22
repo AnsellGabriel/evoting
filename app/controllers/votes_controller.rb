@@ -19,6 +19,24 @@ class VotesController < ApplicationController
   def edit
   end
 
+  def save_vote 
+    @vote = Vote.new
+    @candidate = Candidate.find(params[:c])
+    # @position = Positon.find(@candidate.position_id)
+    @member = Member.find(params[:m])
+    @event = Event.find(@member.event_id)
+    @vote.candidate = @candidate
+    @vote.member = @member
+    @vote.event = @event
+    respond_to do |format|
+      if @vote.save
+        format.html { redirect_to page_vote_url(i: @member, p: @cadidate.position_id), notice: "Vote was successfully created." }
+        format.json { render :show, status: :created, location: @vote }
+      else
+        format.html { render :page_vote, status: :unprocessable_entity }
+        format.json { render json: @vote.errors, status: :unprocessable_entity }
+      end
+  end
   # POST /votes or /votes.json
   def create
     @vote = Vote.new(vote_params)

@@ -9,15 +9,42 @@
   <div class="text-end">
     <%= content_tag :h3, @position.name, class: "text-primary" %>
     <div class="alert alert-info" role="alert">
-      <%= content_tag :h5, "Please vote for #{@position.vacant} candidate(s) " %>
+      <%= content_tag :h5, "You can vote upto #{@position.vacant} candidate(s) " %>
     </div>
   </div>
+  
   <div class="row">
     <div class="col-md-8">
-    
+      <div class="row">
+        <% @candidates.each do |can| %>
+          <div class="col-lg-4 col-md-6 mb-3">
+            <div class="card" style="width: 18rem;">
+              <%= image_tag can.picture, width: "100%", height: "230", class: "card-img-top" if can.picture.attached? %>
+              <div class="card-body">
+                <p><%= can.remark unless can.remark == "" %></p>
+                <%= can.name %>
+                <p class="mb-0"><%= can.position %></p>
+                <%#= can.votes.sum(:vote_amount) %>
+                <div class="text-end">
+                  <%# <a href="#" class="btn btn-primary btn-sm">Vote</a> %>
+                  <% if @vote.nil? %>
+                    <%= link_to  'Vote', save_vote_votes_path(c: can, m: @member), class: 'btn btn-primary btn-sm'  %>
+                  <% else %>
+                    <%= link_to "Delete", @vote, class: "btn btn-danger btn-sm", method: :delete, data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
     </div>
     <div class="col-md-4">
       <div class="card">
+        <div class="card-header">Votes</div>
+        <div class="card-body">
+        
+        </div>
       </div>
     </div>
   </div>

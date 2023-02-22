@@ -2,7 +2,7 @@
   <thead>
     <tr class="border-top border-bottom border-primary">
       <%# <th class="text-primary"></th> %>
-      <th></th>
+      <th>#</th>
       <th class="text-primary">Name</th>
       <th></th>
     </tr>
@@ -10,7 +10,7 @@
   <tbody>
     <% @event.candidates.each do |candidate| %>
       <tr>
-        <%# <th scope="row">= claim_document.id</th> %>
+        <th scope="row"><%= candidate.id %></th>
         <td><%= image_tag candidate.picture, width: "50%", height: "50" if candidate.picture.attached? %></td>
         <td>
           <strong><%= candidate.name %></strong> <br>
