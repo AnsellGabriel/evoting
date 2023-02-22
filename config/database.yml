@@ -54,3 +54,4 @@ production:
   database: evoting
   username: deploy
   password: 1CISPfamily1974!
+  socket: /var/run/mysqld/mysqld.sock  
