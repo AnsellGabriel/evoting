@@ -17,7 +17,7 @@ append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bund
 
 
 # append :linked_files,  'config/credentials/production.key'
-append :linked_files, "config/database.yml", "config/secrets.yml", "config/master.key"
+append :linked_files, "config/master.key", "config/database.yml", "config/secrets.yml" 
  
 namespace :deploy do  #
     namespace :check do  #
@@ -26,15 +26,15 @@ namespace :deploy do  #
         #   unless test("[ -f #{shared_path}/config/master.key ]")  #
         #     upload! 'config/master.key', "#{shared_path}/config/master.key"  #
         #   end  #
+          unless test("[ -f #{shared_path}/config/master.key ]")  #
+            upload! 'config/master.key', "#{shared_path}/config/master.key"  #
+          end  # 
           unless test("[ -f #{shared_path}/config/secrets.yml ]") #
             upload! 'config/secrets.yml', "#{shared_path}/config/secrets.yml" #
           end  #
           unless test("[ -f #{shared_path}/config/database.yml ]")  #
             upload! 'config/database.yml', "#{shared_path}/config/database.yml"  #
           end  #
-          unless test("[ -f #{shared_path}/config/master.key ]")  #
-            upload! 'config/master.key', "#{shared_path}/config/master.key"  #
-          end  # 
           # unless test("[ -f #{shared_path}/config/application.yml ]")  #
           #   upload! 'config/application.yml', "#{shared_path}/config/application.yml"  #
           # end  #
