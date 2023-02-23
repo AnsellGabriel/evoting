@@ -1,0 +1,4 @@
+<%= turbo_stream.update "remote_modal_body" do %>
+
+  <%= render "form", url: votes_path(m: @member, p: @position), meth: 'post' %>
+<% end %>

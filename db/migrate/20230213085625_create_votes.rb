@@ -7,7 +7,7 @@ class CreateVotes < ActiveRecord::Migration[7.0]
       t.references :position, null: false, foreign_key: true
       t.decimal :vote_amount, precision: 18, scale: 2
       t.string :station
-
+      t.boolean :post
       t.timestamps
     end
   end

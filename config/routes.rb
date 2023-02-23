@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   resources :votes do 
     get "save_vote", to: 'votes#save_vote', on: :collection
+    get "vote_review", to: "votes#vote_review", on: :collection
+    get "vote_final", to: "votes#vote_final", on: :collection
+    get "vote_success", to: "votes#vote_success", on: :collection
   end
   resources :candidates
   resources :elecoms

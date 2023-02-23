@@ -25,8 +25,12 @@ class PagesController < ApplicationController
     def vote 
       @member = Member.find(params[:i])
       @position = Position.find(params[:p])
+      @next = params[:p].to_i + 1
+      @next_position = Position.find_by(id: @next)
+      @count_vote = Vote.where(position: @position, member: @member).count
       @event = Event.find(@member.event_id)
       @candidates = Candidate.where(position: @position, event: @event).shuffle
+      @voted = Vote.where(position: @position, member: @member)
     end
   
     private

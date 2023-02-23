@@ -107,6 +107,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_17_004937) do
     t.bigint "position_id", null: false
     t.decimal "vote_amount", precision: 18, scale: 2
     t.string "station"
+    t.boolean "post"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["candidate_id"], name: "index_votes_on_candidate_id"

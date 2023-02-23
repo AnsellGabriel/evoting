@@ -6,36 +6,38 @@
       <%= content_tag :h5, @member.description %>
     </div>
   </div>
-  <div class="text-end">
+  <div class="text-end mb-3">
     <%= content_tag :h3, @position.name, class: "text-primary" %>
     <div class="alert alert-info" role="alert">
       <%= content_tag :h5, "You can vote upto #{@position.vacant} candidate(s) " %>
     </div>
+    <% if @count_vote == @position.vacant  %>
+      <%= link_to "Proceed to " + @next_position.name, page_vote_url(i: @member, p: @next_position), class: 'btn btn-warning btn-lg' unless @next_position.nil? %>
+      <%= link_to 'Review your votes', vote_review_votes_path(m: @member), class: 'btn btn-success btn-lg' if @next_position.nil? %>
+    <% end %>
   </div>
-  
   <div class="row">
     <div class="col-md-8">
       <div class="row">
         <% @candidates.each do |can| %>
-          <div class="col-lg-4 col-md-6 mb-3">
-            <div class="card" style="width: 18rem;">
-              <%= image_tag can.picture, width: "100%", height: "230", class: "card-img-top" if can.picture.attached? %>
-              <div class="card-body">
-                <p><%= can.remark unless can.remark == "" %></p>
-                <%= can.name %>
-                <p class="mb-0"><%= can.position %></p>
-                <%#= can.votes.sum(:vote_amount) %>
-                <div class="text-end">
-                  <%# <a href="#" class="btn btn-primary btn-sm">Vote</a> %>
-                  <% if @vote.nil? %>
-                    <%= link_to  'Vote', save_vote_votes_path(c: can, m: @member), class: 'btn btn-primary btn-sm'  %>
-                  <% else %>
-                    <%= link_to "Delete", @vote, class: "btn btn-danger btn-sm", method: :delete, data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>
-                  <% end %>
+          <% @vote = Vote.find_by(event: @event, member: @member, candidate: can.id) %>
+          <% if @vote.nil? %>
+            <div class="col-lg-4 col-md-6 mb-3">
+              <div class="card" style="width: 18rem;">
+                <%= image_tag can.picture, width: "100%", height: "230", class: "card-img-top" if can.picture.attached? %>
+                <div class="card-body">
+                  <p><%= can.remark unless can.remark == "" %></p>
+                  <%= can.name %>
+                  <p class="mb-0"><%= can.position %></p>
+                  <%#= can.votes.sum(:vote_amount) %>
+                  <div class="text-end">
+                    <%# <a href="#" class="btn btn-primary btn-sm">Vote</a> %>
+                    <%= link_to  'Vote', new_vote_path(c: can, m: @member), class: 'btn btn-primary btn-sm', data: { turbo_frame: "remote_modal" }  %>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          <% end %>
         <% end %>
       </div>
     </div>
@@ -43,7 +45,21 @@
       <div class="card">
         <div class="card-header">Votes</div>
         <div class="card-body">
-        
+          <ul class="list-group list-group-flush">
+            <% @voted.each do |v| %>
+              <li class="list-group-item">
+                <div class="row">
+                  <div class="col-4">
+                    <%= image_tag v.candidate.picture, width: "100%", height: "50", class: "img-fluid rounded-start" if v.candidate.picture.attached? %>
+                  </div>
+                  <div class="col-8">
+                    <strong> <%= v.candidate %> </strong> <br>
+                    <%= link_to "Remove", v, class: "btn btn-danger btn-sm", method: :delete, data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>
+                  </div>
+                </div>
+              </li>
+            <% end %>
+          </ul>
         </div>
       </div>
     </div>
