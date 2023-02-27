@@ -11,7 +11,14 @@
     <div class="alert alert-info" role="alert">
       <%= content_tag :h5, "You can vote upto #{@position.vacant} candidate(s) " %>
     </div>
-    <% if @count_vote == @position.vacant  %>
+    <% @valite = 0 %>
+    <% if @event.required_complete && @count_vote == @position.vacant %>
+      <% @validate = 1 %>
+    <% end %>
+    <% if @event.allow_single && @count_vote > 1 %>
+      <% @validate = 1 %>
+    <% end %>
+    <% if @validate %>
       <%= link_to "Proceed to " + @next_position.name, page_vote_url(i: @member, p: @next_position), class: 'btn btn-warning btn-lg' unless @next_position.nil? %>
       <%= link_to 'Review your votes', vote_review_votes_path(m: @member), class: 'btn btn-success btn-lg' if @next_position.nil? %>
     <% end %>
@@ -22,17 +29,22 @@
         <% @candidates.each do |can| %>
           <% @vote = Vote.find_by(event: @event, member: @member, candidate: can.id) %>
           <% if @vote.nil? %>
-            <div class="col-lg-4 col-md-6 mb-3">
-              <div class="card" style="width: 18rem;">
-                <%= image_tag can.picture, width: "100%", height: "230", class: "card-img-top" if can.picture.attached? %>
-                <div class="card-body">
-                  <p><%= can.remark unless can.remark == "" %></p>
-                  <%= can.name %>
-                  <p class="mb-0"><%= can.position %></p>
-                  <%#= can.votes.sum(:vote_amount) %>
-                  <div class="text-end">
-                    <%# <a href="#" class="btn btn-primary btn-sm">Vote</a> %>
-                    <%= link_to  'Vote', new_vote_path(c: can, m: @member), class: 'btn btn-primary btn-sm', data: { turbo_frame: "remote_modal" }  %>
+            <div class="col-lg-4 col-md-6">
+              <div class="card mb-3" style="width: 18rem;">
+                <div class="row g-0">
+                  <div class="col-md-4">
+                    <%= image_tag can.picture, width: "100%", height: "100%", class: "img-fluid rounded-start" if can.picture.attached? %>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <%= can.remark unless can.remark == "" %>
+                      <strong class="card-title"><%= can.name %></strong>
+                      <p class="card-text text-muted"><%= can.position %></p>
+                      <%#= can.votes.sum(:vote_amount) %>
+                      <div class="text-end">
+                        <%= link_to  'Vote', new_vote_path(c: can, m: @member), class: 'btn btn-primary btn-sm', data: { turbo_frame: "remote_modal" }  %>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
