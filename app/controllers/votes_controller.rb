@@ -112,6 +112,11 @@ class VotesController < ApplicationController
   def vote_success 
     @event = Event.find_by(active: 1)
   end
+
+  def result 
+    @event = Event.find_by(active: 1)
+    @positions = Position.where(event: @event)
+  end
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_vote

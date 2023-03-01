@@ -1,0 +1,28 @@
+<%= content_tag :h2, @event.name %>
+<%= content_tag :h4, 'Election Result' %>
+<% d = DateTime.now %>
+<%# d.strftime("%d/%m/%y %H:%M") %>
+<%= content_tag :p, d.strftime("%m/%d/%Y %H:%M")  %>
+<% @positions.each do |pos| %>
+  <%= content_tag :h4, pos.name, class: "text-primary" %>
+  <div class="col-6">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th> Name </th>
+          <th> Votes </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @vote = Vote.group(:candidate_id).where(position: pos, post: 1).count %>
+        <% @vote.each do |v| %>
+          <tr>
+            <% @candidate = Candidate.find(v[0]) %>
+            <td> <%= @candidate %> </td>
+            <td> <%= to_curr(v[1]) %> </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
