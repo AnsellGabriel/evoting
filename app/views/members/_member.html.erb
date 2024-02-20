@@ -1,8 +1,5 @@
 <div id="<%= dom_id member %>">
-  <p>
-    <strong>Event:</strong>
-    <%= member.event_id %>
-  </p>
+
 
   <p>
     <strong>Name:</strong>
@@ -15,23 +12,11 @@
   </p>
 
   <p>
-    <strong>Area:</strong>
-    <%= member.area %>
+    <strong>Vote Code:</strong>
+    <%= member.vote_code %>
   </p>
 
-  <p>
-    <strong>Voted:</strong>
-    <%= member.voted %>
-  </p>
-
-  <p>
-    <strong>Vote date:</strong>
-    <%= member.vote_date %>
-  </p>
-
-  <p>
-    <strong>Station:</strong>
-    <%= member.station %>
-  </p>
-
+ 
+  <%# page_vote_url(i: @member, p: @position) %>
+   <%= link_to "Vote", page_vote_path(i: @member, p: 1), class: "btn btn-primary" %>
 </div>

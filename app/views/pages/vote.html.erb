@@ -11,17 +11,21 @@
     <div class="alert alert-info" role="alert">
       <%= content_tag :h5, "You can vote upto #{@position.vacant} candidate(s) " %>
     </div>
-    <% @valite = 0 %>
-    <% if @event.required_complete && @count_vote == @position.vacant %>
-      <% @validate = 1 %>
+    <% @validate = 1 %>
+    <% if @event.required_complete && @count_vote != @position.vacant %>
+      <% @validate = 0 %>
     <% end %>
-    <% if @event.allow_single && @count_vote > 1 %>
-      <% @validate = 1 %>
+    <% if @event.allow_single && @count_vote <= 1 %>
+      <% @validate = 0 %>
     <% end %>
-    <% if @validate %>
+    <% if @validate == 1 %>
       <%= link_to "Proceed to " + @next_position.name, page_vote_url(i: @member, p: @next_position), class: 'btn btn-warning btn-lg' unless @next_position.nil? %>
       <%= link_to 'Review your votes', vote_review_votes_path(m: @member), class: 'btn btn-success btn-lg' if @next_position.nil? %>
     <% end %>
+    <% if @position.vacant == @candidates.count && @count_vote == 0 %>
+      <%= link_to 'Vote all', vote_all_votes_path(i: @member, p: @position), class: 'btn btn-success btn-lg' %>
+    <% end %>
+  
   </div>
   <div class="row">
     <div class="col-md-8">
@@ -37,9 +41,9 @@
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
-                      <%= can.remark unless can.remark == "" %>
                       <strong class="card-title"><%= can.name %></strong>
-                      <p class="card-text text-muted"><%= can.position %></p>
+                      <p class="card-text mb-0"><%= can.position %></p>
+                      <small class="text-muted"><%= can.remark unless can.remark == "" %></small>
                       <%#= can.votes.sum(:vote_amount) %>
                       <div class="text-end">
                         <%= link_to  'Vote', new_vote_path(c: can, m: @member), class: 'btn btn-primary btn-sm', data: { turbo_frame: "remote_modal" }  %>
@@ -66,7 +70,8 @@
                   </div>
                   <div class="col-8">
                     <strong> <%= v.candidate %> </strong> <br>
-                    <%= link_to "Remove", v, class: "btn btn-danger btn-sm", method: :delete, data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>
+                    <%#= link_to "Remove", v, class: "btn btn-danger btn-sm", method: :delete, data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>
+                    <%= button_to "Remove", v, class: "btn btn-danger btn-sm", method: :delete, onclick: "return confirm('Are you sure?')" %>
                   </div>
                 </div>
               </li>

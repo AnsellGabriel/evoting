@@ -15,7 +15,7 @@ class CandidatesController < ApplicationController
     # @candidate = Candidate.new
     @event = Event.find(params[:v])
     @candidate = @event.candidates.build
-    set_dummy_data
+    # set_dummy_data
   end
 
   def set_dummy_data 

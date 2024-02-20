@@ -8,9 +8,16 @@ class PagesController < ApplicationController
     def enter_code 
         # puts "@@@ create"
         @election = Election.new(election_params)
-        @member = Member.find_by(vote_code: @election.voter_code)
+        if @election.member.nil?
+          @member = Member.find_by(vote_code: @election.voter_code)
+          puts "@@@@ #{@member.vote_code}"
+        else 
+          @member = Member.find(@election.member_id)
+          puts "@@@@ #{@member.vote_code}"
+          @election.voter_code = @member.vote_code
+        end
         @position = Position.find(params[:p])
-        #  raise "errors"
+        # raise "errors"
         respond_to do |format|
             if @election.save
               format.html { redirect_to page_vote_url(i: @member, p: @position), notice: "Member was successfully created." }
@@ -29,8 +36,18 @@ class PagesController < ApplicationController
       @next_position = Position.find_by(id: @next)
       @count_vote = Vote.where(position: @position, member: @member).count
       @event = Event.find(@member.event_id)
-      @candidates = Candidate.where(position: @position, event: @event).shuffle
+      @candidates = Candidate.where(position: @position, event: @event)
       @voted = Vote.where(position: @position, member: @member)
+    end
+
+    def vote_all 
+      @member = Member.find(params[:i])
+      @position = Position.find(params[:p])
+      @event = Event.find(@member.event_id)
+      @candidates = Candidate.where(position: @position, event: @event)
+      @candidates.each do |can|
+        
+      end
     end
   
     private

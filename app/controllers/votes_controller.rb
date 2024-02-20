@@ -48,6 +48,24 @@ class VotesController < ApplicationController
         end
       end
   end
+  def vote_all 
+    @member = Member.find(params[:i])
+    @position = Position.find(params[:p])
+    @event = Event.find(@member.event_id)
+    @candidates = Candidate.where(position: @position)
+    @candidates.each do |can|
+      @vote = Vote.new 
+      @vote.candidate = can 
+      @vote.member = @member 
+      @vote.event = @event 
+      @vote.position = @position
+      @vote.save
+    end
+    respond_to do |format|
+      format.html { redirect_to page_vote_path(i: @member, p: @position), notice: "Vote was successfully created." }
+      format.json { render :show, status: :created, location: @vote }
+    end
+  end
   # POST /votes or /votes.json
   def create
     @vote = Vote.new(vote_params)
@@ -100,8 +118,10 @@ class VotesController < ApplicationController
   def vote_final 
     @member = Member.find(params[:m])
     # @votes = Vote.where(event_hub: @event_hub, coop_event: @event_hub.coop_event)
+    @member.voted = 1
+    @member.vote_date = Date.today
     respond_to do |format|
-      if @member.update_attribute(:voted, 1) 
+      if @member.update(voted: 1, vote_date: Date.today) 
         @vote_update = Vote.where(member: @member)
         @vote_update.update_all(post: 1)
         format.html { redirect_to vote_success_votes_path, notice: "Updated" }
@@ -116,6 +136,7 @@ class VotesController < ApplicationController
   def result 
     @event = Event.find_by(active: 1)
     @positions = Position.where(event: @event)
+    @count_voter = Member.where(voted: 1).count
   end
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -125,6 +146,6 @@ class VotesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def vote_params
-      params.require(:vote).permit(:event_id, :candidate_id, :member_id, :position_id, :vote_amount, :station)
+      params.require(:vote).permit(:event_id, :candidate_id, :member_id, :position_id, :vote_amount, :station, :vote_code)
     end
 end
