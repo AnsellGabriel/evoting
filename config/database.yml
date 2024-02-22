@@ -51,7 +51,8 @@ test:
 #
 production:
   <<: *default
-  database: evoting
+  # database: evoting
+  database: 1cisp_evoting
   username: deploy
   password: 1CISPfamily1974!
   socket: /var/run/mysqld/mysqld.sock  
