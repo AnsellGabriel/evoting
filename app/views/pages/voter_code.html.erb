@@ -1,5 +1,5 @@
 <div class="container flex">
-  <div class="card">
+  <div class="card" style= "max-width: 600px;">
     <%= image_tag 'cooptechlogo.png', width: 200, class: 'mb-2 mb-lg-0 me-2' %>
     <div class="card-body">
       <%= simple_form_for @election, url: enter_code_path(p: params[:p]), method: :post do |f| %>
