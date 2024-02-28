@@ -10,10 +10,10 @@ class PagesController < ApplicationController
         @election = Election.new(election_params)
         if @election.member.nil?
           @member = Member.find_by(vote_code: @election.voter_code)
-          puts "@@@@ #{@member.vote_code}"
+          # puts "@@@@ #{@member.vote_code}"
         else 
           @member = Member.find(@election.member_id)
-          puts "@@@@ #{@member.vote_code}"
+          # puts "@@@@ #{@member.vote_code}"
           @election.voter_code = @member.vote_code
         end
         @position = Position.find(params[:p])

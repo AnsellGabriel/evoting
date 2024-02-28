@@ -55,7 +55,18 @@ body {
   // background-repeat: no-repeat;
   // overflow: hidden;
 }
+.container {
+  // display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Set the height to the full viewport height */
+}
 
+.card {
+  max-width: 600px;
+  width: 100%; /* Ensure the card takes full width */
+  /* Add any additional styling you need for the card */
+}
 .ocean { 
   height: 5%;
   width:100%;

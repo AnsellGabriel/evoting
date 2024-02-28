@@ -1,40 +1,45 @@
 <div class="container">
-  <div class="card mb-3 mt-5">
-    <div class="card-header">Election</div>
-    <div class="card-body">
-      <%= content_tag :h3, @member.name %>
-      <%= content_tag :h5, @member.description %>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card mb-3 mt-5">
+        <div class="card-header">Election</div>
+        <div class="card-body">
+          <%= content_tag :h3, @member.name %>
+          <%= content_tag :h5, @member.description %>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="text-end mb-3">
-    <%= content_tag :h3, @position.name, class: "text-primary" %>
-    <div class="alert alert-info" role="alert">
-      <%= content_tag :h5, "You can vote upto #{@position.vacant} candidate(s) " %>
+    <div class="col-md-6 mt-3">
+      <div class="text-end mb-3">
+        <%= content_tag :h3, @position.name, class: "text-primary" %>
+        <div class="alert alert-info" role="alert">
+          <%= content_tag :h5, "You can vote upto #{@position.vacant} candidate(s) " %>
+        </div>
+        <% @validate = 1 %>
+        <% if @event.required_complete && @count_vote != @position.vacant %>
+          <% @validate = 0 %>
+        <% end %>
+        <% if @event.allow_single && @count_vote <= 1 %>
+          <% @validate = 0 %>
+        <% end %>
+        <% if @validate == 1 %>
+          <%= link_to "Proceed to " + @next_position.name, page_vote_url(i: @member, p: @next_position), class: 'btn btn-warning btn-lg' unless @next_position.nil? %>
+          <%= link_to 'Review your votes', vote_review_votes_path(m: @member), class: 'btn btn-success btn-lg' if @next_position.nil? %>
+        <% end %>
+        <% if @position.vacant == @candidates.count && @count_vote == 0 %>
+          <%= link_to 'Vote all', vote_all_votes_path(i: @member, p: @position), class: 'btn btn-success btn-lg' %>
+        <% end %>
+      </div>
     </div>
-    <% @validate = 1 %>
-    <% if @event.required_complete && @count_vote != @position.vacant %>
-      <% @validate = 0 %>
-    <% end %>
-    <% if @event.allow_single && @count_vote <= 1 %>
-      <% @validate = 0 %>
-    <% end %>
-    <% if @validate == 1 %>
-      <%= link_to "Proceed to " + @next_position.name, page_vote_url(i: @member, p: @next_position), class: 'btn btn-warning btn-lg' unless @next_position.nil? %>
-      <%= link_to 'Review your votes', vote_review_votes_path(m: @member), class: 'btn btn-success btn-lg' if @next_position.nil? %>
-    <% end %>
-    <% if @position.vacant == @candidates.count && @count_vote == 0 %>
-      <%= link_to 'Vote all', vote_all_votes_path(i: @member, p: @position), class: 'btn btn-success btn-lg' %>
-    <% end %>
-  
   </div>
   <div class="row">
     <div class="col-md-8">
       <div class="row">
-        <% @candidates.each do |can| %>
+        <% @candidates.sort_by(&:name).each do |can| %>
           <% @vote = Vote.find_by(event: @event, member: @member, candidate: can.id) %>
           <% if @vote.nil? %>
-            <div class="col-lg-4 col-md-6">
-              <div class="card mb-3" style="width: 18rem;">
+            <div class="col-lg-12">
+              <div class="card mb-3">
                 <div class="row g-0">
                   <div class="col-md-4">
                     <%= image_tag can.picture, width: "100%", height: "100%", class: "img-fluid rounded-start" if can.picture.attached? %>
