@@ -1,4 +1,4 @@
-<div class="container flex">
+<div class="container flex" style="height: 100vh;">
   <div class="card" style= "max-width: 600px;">
     <%= image_tag 'cooptechlogo.png', width: 200, class: 'mb-2 mb-lg-0 me-2' %>
     <div class="card-body">
@@ -7,7 +7,7 @@
         <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
         <div class="form-inputs mb-5" style="text-align: center;">
           <div class="form-inputs mb-3">
-            <%= f.input :voter_code, label: "Enter your voter code", style: "text-align: center;" %>
+            <%= f.input :voter_code, label: "Enter your voter code", input_html: { style: "text-align: center;" }  %>
           </div>
           <div class="form-actions text-end">
             <%= f.button :submit, class: "btn btn-success btn-lg", value: "Vote" %>

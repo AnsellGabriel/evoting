@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom py-3 mb-4">
-  <%# <div class="container"> %>
+  <div class="container">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -25,11 +25,11 @@
             <li><hr class="dropdown-divider"></li>
             <%= link_to "Position", positions_path, class: "dropdown-item" %>
             <%= link_to "Candidates", candidates_path, class: "dropdown-item" %>
-            <%#= link_to "Result", result_votes_path, class: "dropdown-item" %>
+            <%= link_to "Result", result_votes_path, class: "dropdown-item" %>
             
           </ul>
         </li>
       </ul>
     </div>
-  <%# </div> %>
+  </div>
 </nav>
