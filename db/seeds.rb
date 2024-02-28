@@ -5,9 +5,9 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
-spreadsheet = Roo::Spreadsheet.open("./db/uploads/bideco.xlsx")
+spreadsheet = Roo::Spreadsheet.open("./db/uploads/badevco.xlsx")
 
-(1..spreadsheet.last_row).each do |row|
+(2..spreadsheet.last_row).each do |row|
     # coop = Cooperative.find_or_initialize_by(name: spreadsheet.cell(row, 'A'))
     # puts "#{coop.name}" if coop.save!
     

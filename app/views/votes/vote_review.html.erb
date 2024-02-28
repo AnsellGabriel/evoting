@@ -4,13 +4,13 @@
   <i class="bi bi-check-circle"></i>
   Please check your votes.
 </div>
-<div class="text-end">
+<div class="text-end mb-3">
   <%= link_to '<i class="bi bi-box-seam"></i> Save Votes'.html_safe , vote_final_votes_path(m: @member), class: 'btn btn-success btn-lg' %>
 </div>
 <div class="row">
   <% @positions.each do |p| %>
-    <div class="col-3">
-      <div class="card">
+    <div class="col-md-3">
+      <div class="card mb-2">
         <div class="card-header">
           <strong class="text-primary"> <%= p.name %> </strong><br>
           <%= link_to "Change", page_vote_url(i: @member, p: p), class: 'btn btn-warning btn-sm' %>
