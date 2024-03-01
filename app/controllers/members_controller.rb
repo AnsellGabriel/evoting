@@ -18,6 +18,10 @@ class MembersController < ApplicationController
     @event = Event.find_by(active: 1)
     @member = Member.new
     @member.event_id = @event.id
+    code = SecureRandom.alphanumeric(4).upcase
+    modified_string = code.gsub(/[1iO0I]/, "A")
+    @member.vote_code = modified_string
+    @member.name = FFaker::NamePH.name
   end
 
   # GET /members/1/edit
@@ -30,11 +34,12 @@ class MembersController < ApplicationController
     
     respond_to do |format|
       if @member.save
-        format.html { redirect_to member_url(@member), notice: "Member was successfully created." }
+        format.html { redirect_to members_path, notice: "Member was successfully created." }
         format.json { render :show, status: :created, location: @member }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @member.errors, status: :unprocessable_entity }
+        format.turbo_stream { render :form_update, status: :unprocessable_entity }
       end
     end
   end
@@ -43,11 +48,12 @@ class MembersController < ApplicationController
   def update
     respond_to do |format|
       if @member.update(member_params)
-        format.html { redirect_to member_url(@member), notice: "Member was successfully updated." }
+        format.html { redirect_to members_path, notice: "Member was successfully updated." }
         format.json { render :show, status: :ok, location: @member }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @member.errors, status: :unprocessable_entity }
+        format.turbo_stream { render :form_update, status: :unprocessable_entity }
       end
     end
   end

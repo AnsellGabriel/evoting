@@ -18,7 +18,7 @@
 </div>
 <%#== pagy_nav(@pagy) if @pagy.pages > 1 %>
 <div class="text-end mb-3">
-  <%= link_to new_member_path, class: 'btn btn-primary' do %>
+  <%= link_to new_member_path, class: 'btn btn-primary', data: { turbo_frame: "remote_modal" } do %>
     New Member
   <% end %>
 </div>
@@ -49,7 +49,7 @@
             <td><%= member.station %></td>
             <td>
               <%= link_to 'View', member, class: 'btn btn-secondary btn-sm' %>
-              <%= link_to 'Edit', edit_member_path(member), class: 'btn btn-secondary btn-sm' %>
+              <%= link_to 'Edit', edit_member_path(member), class: 'btn btn-secondary btn-sm', data: { turbo_frame: "remote_modal" } %>
               <%= link_to "Delete", member, class: "btn btn-danger btn-sm", method: :delete, data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>
             </td>
           </tr>

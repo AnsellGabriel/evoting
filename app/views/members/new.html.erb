@@ -1,11 +1,17 @@
 
-<div class="card">
+<%# <div class="card">
   <div class="card-header">
   <h5>Add member</h5>
   
   </div>
 
-  <div class="card-body">
-    <%= render "form", member: @member %>
-  </div>
-</div>
+  <div class="card-body"> %>
+    <%#= render "form", member: @member %>
+  <%# </div>
+</div> %>
+
+<%= render "remote_modal", title: "New item" do %>
+
+  <%= render "form", member: @member %>
+
+<% end %>
