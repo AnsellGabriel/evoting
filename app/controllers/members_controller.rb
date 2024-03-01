@@ -21,7 +21,7 @@ class MembersController < ApplicationController
     code = SecureRandom.alphanumeric(4).upcase
     modified_string = code.gsub(/[1iO0I]/, "A")
     @member.vote_code = modified_string
-    @member.name = FFaker::NamePH.name
+    @member.name = FFaker::NamePH.name if Rails.env.development?
   end
 
   # GET /members/1/edit
