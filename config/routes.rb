@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   resources :votes do 
     get "save_vote", to: 'votes#save_vote', on: :collection
     get "vote_review", to: "votes#vote_review", on: :collection

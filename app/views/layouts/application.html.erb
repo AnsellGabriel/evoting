@@ -12,9 +12,16 @@
     <%= javascript_importmap_tags %>
   </head>
   <body>
+     <%= render partial: '/layouts/navbar' if current_user %>
+    
     <%#= puts "@@@@@@ #{params[:controller]}" %>
-     <%= render partial: '/layouts/navbar' unless params[:controller] == 'pages' || params[:controller] ==  'registrations' || params[:controller] ==  'elections' || params[:controller] == 'votes' %>
+     <%# <%= render partial: '/layouts/navbar' unless params[:controller] == 'pages' || params[:controller] ==  'registrations' || params[:controller] ==  'elections' || params[:controller] == 'votes' || if user_signed_in? %>
      <div class=" <%= "container mt-3" unless params[:controller] == 'pages' || params[:controller] ==  'elections' %> ">
+      <%# <div class="row d-flex justify-content-center"> %>
+        <%# <div id="flash" style="width: auto" remote_modal> %>
+          <%#= render "layouts/notification" %>
+        <%# </div> %>
+      <%# </div> %>
       <%= yield %>
       <%= turbo_frame_tag "remote_modal", target: "_top" %>
     </div>
