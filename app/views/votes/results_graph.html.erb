@@ -1,0 +1,30 @@
+<%= turbo_frame_tag :occuring, data: { controller: "occuring" } do %>
+
+    <div class="mb-5">
+        <%#= column_chart @graph %>
+        <%= content_tag :h3, @event.name %> 
+    </div>
+    <div class="mb-3">
+        <%#= column_chart @graph_with_name %>
+            <div class="row">
+                <% @positions.each do |pos| %>
+                    <div class="<%= 'col-md-6' unless pos.id == 1 %>">
+                        <div class="card mb-3">
+                            <%= content_tag :h4, pos.name, class: "card-header text-primary" %>
+                            <div class="card-body">
+                                <% @vote = Vote.joins(:candidate).group('candidates.name').where(position: pos, post: 1).count('id') %>
+                                <% results = Vote.group(:candidate_id).where(position: pos, post: 1).count %>
+                                <% @graph = results.map { |candidate, count| [candidate, count]} %>
+                                <%# results_with_name = Vote.joins(:candidate).group('candidates.name').count %>
+                                <% @graph_with_name = @vote.map { |candidate_name, count| [candidate_name, count] }  %>
+
+                                <%= column_chart @graph_with_name unless @event.election? %>
+                                <%= column_chart @graph if @event.election?%>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>
+            </div>
+    </div>
+    <p>Loading</p>
+ <% end %>

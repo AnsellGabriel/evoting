@@ -10,6 +10,16 @@ class VotesController < ApplicationController
   def show
   end
 
+  def results_graph
+    @event = Event.find_by(active: 1)
+    @positions = Position.where(event: @event)
+    results = Vote.group(:candidate_id).count
+    @graph = results.map { |candidate, count| [candidate, count]}
+
+    # results_with_name = Vote.joins(:candidate).group('candidates.name').count
+    # @graph_with_name = results_with_name.map { |candidate_name, count| [candidate_name, count] }
+  end
+
   # GET /votes/new
   def new
     @vote = Vote.new
@@ -113,6 +123,9 @@ class VotesController < ApplicationController
     @member = Member.find(params[:m])
     @event = Event.find_by(active: 1)
     @positions = Position.where(event: @event)
+
+    # @referendum_response = ReferendumResponse.new
+    @referendums = ReferendumResponse.where(member: @member)
   end
 
   def vote_final 

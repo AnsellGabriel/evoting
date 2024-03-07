@@ -34,3 +34,35 @@
     </div>
   <% end %>
 </div>
+<% if @event.referendums.present? %>
+    <% i  = 1 %>
+    <div class="row">
+      <div class="col-md-6">
+        <table class="table table-light table-border table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Referendum <%= link_to 'Change', new_referendum_response_path(i: @member), class: "btn btn-warning btn-sm" %></th>
+              <th>Answer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @referendums.each do |r| %>
+                <tr>
+                  <td><strong><%= i %></strong></td>
+                  <td><%= r.referendum %></td>
+                  <td>
+                    <% if r.response %>
+                    <strong>Oo</strong>
+                    <% else %>
+                    <strong>Hindi</strong>
+                    <% end %>
+                  </td>
+                </tr>
+                <% i += 1%>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+<% end %>
