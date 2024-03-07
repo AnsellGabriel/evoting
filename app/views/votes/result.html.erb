@@ -58,6 +58,26 @@
       <p>Total number of voters <%= to_curr(@count_voter) %></p>
       <%= content_tag :p, 'Certified by' %> <br>
       <%= content_tag :p, '1CISP Representative' %>
+      <% if @event.elecoms.present? %>
+          <div class="col-6">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Election Committee</th>
+                  <th>Sign & Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @event.elecoms.each do |e| %>
+                      <tr>
+                        <td><%= e.name %></td>
+                        <td></td>
+                      </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+      <% end %>
     <% else %>
       <div class="col d-flex justify-content-center">
       <div class="alert alert-warning mt-5" role="alert" style="width:800px">

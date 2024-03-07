@@ -1,4 +1,5 @@
 class CandidatesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_candidate, only: %i[ show edit update destroy ]
 
   # GET /candidates or /candidates.json

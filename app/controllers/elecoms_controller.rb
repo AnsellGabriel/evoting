@@ -13,6 +13,7 @@ class ElecomsController < ApplicationController
   # GET /elecoms/new
   def new
     @elecom = Elecom.new
+    @elecom.event = Event.find_by(active: 1)
   end
 
   # GET /elecoms/1/edit
@@ -22,7 +23,6 @@ class ElecomsController < ApplicationController
   # POST /elecoms or /elecoms.json
   def create
     @elecom = Elecom.new(elecom_params)
-
     respond_to do |format|
       if @elecom.save
         format.html { redirect_to elecom_url(@elecom), notice: "Elecom was successfully created." }
@@ -65,6 +65,6 @@ class ElecomsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def elecom_params
-      params.require(:elecom).permit(:name, :position)
+      params.require(:elecom).permit(:event_id, :name, :position)
     end
 end
