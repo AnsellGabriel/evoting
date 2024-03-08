@@ -1,8 +1,8 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.17.1"
 
-# set :application, "evoting"
-set :application, "1cisp_evoting"
+set :application, "evoting"
+# set :application, "1cisp_evoting"
 set :repo_url, "git@github.com:AnsellGabriel/evoting.git"
 set :rails_env, 'production' #
 set :branch, 'main' #

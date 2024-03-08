@@ -1,4 +1,5 @@
 class ReferendumsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_referendum, only: %i[ show edit update destroy ]
 
   def submit_answers

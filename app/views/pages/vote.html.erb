@@ -24,7 +24,7 @@
         <% end %>
         <% if @validate == 1 %>
           <%= link_to "Proceed to " + @next_position.name, page_vote_url(i: @member, p: @next_position), class: 'btn btn-warning btn-lg' unless @next_position.nil? %>
-          <% if @event.referendums.empty? %>
+          <% if @event.referendums.where(active: 1).empty? %>
             <%= link_to 'Review your votes', vote_review_votes_path(m: @member), class: 'btn btn-success btn-lg' if @next_position.nil? %>
           <% else %>
             <%= link_to 'Referendum', new_referendum_response_path(i: @member), class: 'btn btn-success btn-lg' if @next_position.nil? %>

@@ -1,4 +1,5 @@
 class ElecomsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_elecom, only: %i[ show edit update destroy ]
 
   # GET /elecoms or /elecoms.json
