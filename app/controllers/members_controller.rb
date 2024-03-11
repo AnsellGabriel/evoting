@@ -1,7 +1,7 @@
 class MembersController < ApplicationController
   include Pagy::Backend
   before_action :authenticate_user!
-  before_action :set_member, only: %i[ show edit update destroy ]
+  before_action :set_member, only: %i[ show edit update destroy cancel_vote ]
 
   # GET /members or /members.json
   def index
@@ -59,6 +59,20 @@ class MembersController < ApplicationController
     end
   end
 
+  def cancel_vote 
+    respond_to do |format|
+      if @member.update(voted: 0)
+        member_vote = Vote.where(member: @member)
+        member_vote.destroy_all
+        format.html { redirect_to members_path, notice: "Member was votes canceled." }
+        format.json { render :show, status: :ok, location: @member }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @member.errors, status: :unprocessable_entity }
+        format.turbo_stream { render :form_update, status: :unprocessable_entity }
+      end
+    end
+  end
   # DELETE /members/1 or /members/1.json
   def destroy
     @member.destroy

@@ -15,7 +15,7 @@ class VotesController < ApplicationController
     @positions = Position.where(event: @event)
     results = Vote.group(:candidate_id).count
     @graph = results.map { |candidate, count| [candidate, count]}
-
+    @member = Member.where(event: @event).all
     # results_with_name = Vote.joins(:candidate).group('candidates.name').count
     # @graph_with_name = results_with_name.map { |candidate_name, count| [candidate_name, count] }
   end

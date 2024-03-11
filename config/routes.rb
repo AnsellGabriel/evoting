@@ -15,7 +15,9 @@ Rails.application.routes.draw do
   end
   resources :candidates
   resources :elecoms
-  resources :members
+  resources :members do
+    get "cancel_vote", to: "members#cancel_vote", on: :member
+  end
   resources :positions
   resources :events
   resources :referendum_responses

@@ -18,5 +18,7 @@
 
  
   <%# page_vote_url(i: @member, p: @position) %>
-   <%= link_to "Vote", page_vote_path(i: @member, p: 1), class: "btn btn-primary" %>
+   <%#= link_to "Vote", page_vote_path(i: @member, p: 1), class: "btn btn-primary" %>
+   <%= link_to "Cancel Vote", cancel_vote_member_path(@member), class: "btn btn-primary", onclick: "return confirm('Are you sure?')" %>
+  
 </div>
