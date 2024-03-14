@@ -11,10 +11,10 @@
     <%#= f.input :vote_amount %>
     <%#= f.input :station %>
   </div>
-  <p>
+  <h5>
     <strong>Candidate:</strong>
     <%= @vote.candidate %>
-  </p>
+  </h5>
   <p>
     <strong>Position:</strong>
     <%= @vote.position%>
@@ -22,7 +22,7 @@
 
   <div class="form-actions text-end">
     <%= link_to "Back", page_vote_url(i: @member, p: @position), class: "btn btn-secondary" %>
-    <%= link_to "Vote", save_vote_votes_path(m: @vote.member, c: @vote.candidate), class: "btn btn-primary" %>
+    <%= link_to "Confirm", save_vote_votes_path(m: @vote.member, c: @vote.candidate), class: "btn btn-primary" %>
     <%#= f.button :submit, class: "btn btn-success" %>
   </div>
 <% end %>
