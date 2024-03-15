@@ -6,6 +6,7 @@ class PagesController < ApplicationController
         @election = Election.new
     end
     def enter_code 
+      # raise 'errors'
         # puts "@@@ create"
         @election = Election.new(election_params)
         if @election.member.nil?

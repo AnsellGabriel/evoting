@@ -20,11 +20,21 @@
     
 # end
 
-for i in 1..50
-    mem = Member.find_or_initialize_by(name: FFaker::NamePH.name)
-    code = SecureRandom.alphanumeric(4).upcase
-    modified_string = code.gsub(/[1iO0I]/, "A")
-    mem.vote_code = modified_string
-    mem.event_id = 1
-    puts "#{mem.name}" if mem.save!
+# for i in 1..50
+#     mem = Member.find_or_initialize_by(name: FFaker::NamePH.name)
+#     code = SecureRandom.alphanumeric(4).upcase
+#     modified_string = code.gsub(/[1iO0I]/, "A")
+#     mem.vote_code = modified_string
+#     mem.event_id = 1
+#     puts "#{mem.name}" if mem.save!
+# end
+
+event = Event.find(1)
+spreadsheet = Roo::Spreadsheet.open("./db/uploads/kapit bisig evoting/LIST OF VOTERS.xlsx")
+(4..spreadsheet.last_row).each do |row|
+    mem = Member.find_or_initialize_by(event: event, name: spreadsheet.cell(row, "B"))
+    mem.voted = false
+    mem.description = ""
+    mem.vote_code = "-"
+    puts "MEMBER: #{mem.name} - SAVED!" if mem.save!
 end
