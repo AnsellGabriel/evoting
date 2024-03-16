@@ -128,18 +128,25 @@ class VotesController < ApplicationController
     @referendums = ReferendumResponse.where(member: @member)
   end
 
-  def vote_final 
+  def vote_final
     @member = Member.find(params[:m])
+    
     # @votes = Vote.where(event_hub: @event_hub, coop_event: @event_hub.coop_event)
-    @member.voted = 1
-    @member.vote_date = Date.today
-    respond_to do |format|
-      if @member.update(voted: 1, vote_date: Date.today) 
-        @vote_update = Vote.where(member: @member)
-        @vote_update.update_all(post: 1)
-        format.html { redirect_to vote_success_votes_path, notice: "Updated" }
+    
+      if current_user
+        if @member.update!(voted: 1, vote_date: Date.today, user_id: current_user.id) 
+          @vote_update = Vote.where(member: @member)
+          @vote_update.update_all(post: 1)
+          redirect_to vote_success_votes_path
+        end
+      else
+        if @member.update!(voted: 1, vote_date: Date.today) 
+          @vote_update = Vote.where(member: @member)
+          @vote_update.update_all(post: 1)
+          redirect_to vote_success_votes_path
+        end
       end
-    end
+  
   end
   
   def vote_success 

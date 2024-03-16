@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_07_032452) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_16_022925) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -90,7 +90,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_07_032452) do
     t.string "vote_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
     t.index ["event_id"], name: "index_members_on_event_id"
+    t.index ["user_id"], name: "index_members_on_user_id"
   end
 
   create_table "positions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
