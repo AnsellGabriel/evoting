@@ -1,5 +1,6 @@
 class Member < ApplicationRecord
   belongs_to :event
+  belongs_to :user, optional: true
   validates :vote_code, uniqueness: true
   validates_presence_of :name, :vote_code
   def to_s 
