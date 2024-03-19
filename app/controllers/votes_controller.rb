@@ -134,7 +134,7 @@ class VotesController < ApplicationController
     # @votes = Vote.where(event_hub: @event_hub, coop_event: @event_hub.coop_event)
     
       if current_user
-        if @member.update!(voted: 1, vote_date: Date.today, user_id: current_user.id) 
+        if @member.update!(voted: 1, vote_date: Time.now, user_id: current_user.id) 
           @vote_update = Vote.where(member: @member)
           @vote_update.update_all(post: 1)
           redirect_to vote_success_votes_path
