@@ -8,7 +8,7 @@
         <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
         <div class="form-inputs mb-5" style="text-align: center;">
           <div class="form-inputs mb-3">
-            <%= f.input :voter_code, label: "Enter your passbook", input_html: { style: "text-align: center;" }  %>
+            <%= f.input :voter_code, label: "Enter your voter code", input_html: { style: "text-align: center;" }  %>
           </div>
           <div class="form-actions text-end">
             <%= f.button :submit, class: "btn btn-success btn-lg", value: "Enter" %>
