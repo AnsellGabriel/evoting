@@ -29,7 +29,7 @@ class VotesController < ApplicationController
     @vote.candidate = @candidate
     @vote.member = @member
     @vote.event_id = @member.event_id
-    @vote.position_id = @candidate.position_id
+    @vote.position = @candidate.position_id
     
   end
 
@@ -81,7 +81,7 @@ class VotesController < ApplicationController
     @vote = Vote.new(vote_params)
     @member = @vote.member
     @position = @vote.position
-    raise "errors"
+    # raise "errors"
     respond_to do |format|
       if @vote.save
         format.html { redirect_to page_vote_url(i: @member, p: @position), notice: "Vote was successfully created." }

@@ -30,7 +30,7 @@
 # end
 
 
-spreadsheet = Roo::Spreadsheet.open("./db/uploads/iemc_members.xlsx")
+spreadsheet = Roo::Spreadsheet.open("./db/uploads/cof_votecode.xlsx")
 (2..spreadsheet.last_row).each do |row|
     mem = Member.find_or_initialize_by(name: spreadsheet.cell(row, 'A'))
     mem.event_id = 1
