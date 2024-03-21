@@ -29,7 +29,7 @@ class VotesController < ApplicationController
     @vote.candidate = @candidate
     @vote.member = @member
     @vote.event_id = @member.event_id
-    @vote.position = @candidate.position_id
+    @vote.position = @candidate.position
     
   end
 
