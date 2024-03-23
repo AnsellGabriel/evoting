@@ -64,6 +64,8 @@ class MembersController < ApplicationController
       if @member.update(voted: 0)
         member_vote = Vote.where(member: @member)
         member_vote.destroy_all
+        member_ref = ReferendumResponse.where(member: @member)
+        member_ref.destroy_all
         format.html { redirect_to members_path, notice: "Member was votes canceled." }
         format.json { render :show, status: :ok, location: @member }
       else
