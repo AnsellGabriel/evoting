@@ -7,8 +7,8 @@ class Election < ApplicationRecord
   def check_votercode
     # raise 'errors'
     @event = Event.find_by(active: 1)
-    # @member = Member.find_by(event: @event, vote_code: voter_code)
-    @member = Member.find(member_id)
+    @member = Member.find_by(event: @event, vote_code: voter_code)
+    # @member = Member.find(member_id)
     # raise 'errors'
     unless @event.election 
       errors.add(:base,"Election is now close")   

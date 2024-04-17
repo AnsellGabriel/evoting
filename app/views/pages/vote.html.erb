@@ -39,7 +39,8 @@
   <div class="row">
     <div class="col-md-8">
       <div class="row">
-        <% @candidates.sort_by(&:name).each do |can| %>
+        <%# @candidates.sort_by(&:name).each do |can| %>
+        <% @candidates.sort_by(&:id).each do |can| %>
           <% @vote = Vote.find_by(event: @event, member: @member, candidate: can.id) %>
           <% if @vote.nil? %>
             <div class="col-lg-4 text-center">
@@ -55,7 +56,8 @@
                       <small class="text-muted"><%= can.remark unless can.remark == "" %></small>
                       <%#= can.votes.sum(:vote_amount) %>
                       <div class="text-end">
-                        <%= link_to  'Vote', new_vote_path(c: can, m: @member), class: 'btn btn-primary', data: { turbo_frame: "remote_modal" }  %>
+                        <%#= link_to  'Vote', new_vote_path(c: can, m: @member), class: 'btn btn-success', data: { turbo_frame: "remote_modal" }  %>
+                        <%= link_to  'Vote', save_vote_votes_path(c: can, m: @member), class: 'btn btn-primary' %>
                       </div>
                     </div>
                   <%# </div> %>
