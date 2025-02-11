@@ -4,6 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  validates :user_name, presence: true
+
   def active_for_authentication?
     super && active?
   end

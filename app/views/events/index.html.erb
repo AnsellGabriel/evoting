@@ -2,7 +2,7 @@
 
 
 <div class="text-end mb-3">
-  <%= link_to new_event_path, class: 'btn btn-primary' do %>
+  <%= link_to new_event_path, class: "btn btn-primary" do %>
     New Event
   <% end %>
 </div>
@@ -37,9 +37,10 @@
         <td><%= event.election %></td>
     
           <td>
-            <%= link_to 'View', event, class: 'btn btn-secondary btn-sm' %>
-            <%= link_to 'Edit', edit_event_path(event), class: 'btn btn-secondary btn-sm' %>
-            <%#= link_to "Delete", event, class: "btn btn-danger btn-sm", method: :delete, data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>
+            <%= link_to "Activate", activate_event_path(event), method: :post, class: "btn btn-success btn-sm" %>
+            <%= link_to "View", event, class: "btn btn-secondary btn-sm" %>
+            <%= link_to "Edit", edit_event_path(event), class: "btn btn-secondary btn-sm" %>
+            <% #= link_to "Delete", event, class: "btn btn-danger btn-sm", method: :delete, data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>
           </td>
 
         </tr>
