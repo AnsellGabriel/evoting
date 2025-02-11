@@ -55,7 +55,7 @@
                       <small class="text-muted"><%= can.remark unless can.remark == "" %></small>
                       <% #= can.votes.sum(:vote_amount) %>
                       <div class="text-end">
-                        <%= link_to "Vote", new_vote_path(c: can, m: @member), class: "btn btn-primary", data: { turbo_frame: "remote_modal" } %>
+                        <% #= link_to "Vote", new_vote_path(c: can, m: @member), class: "btn btn-primary", data: { turbo_frame: "remote_modal" } %>
                         <%= link_to "Vote", add_vote_member_path(@member, c: can), method: :post, class: "btn btn-warning" %>
                       </div>
                     </div>
