@@ -16,15 +16,15 @@
           <%= content_tag :h5, "You can vote upto #{@position.vacant} candidate(s) " %>
         </div>
         <% @validate = 1 %>
-        <% if @event.required_complete && @count_vote != @position.vacant %>
+        <% if @my_event.required_complete && @count_vote != @position.vacant %>
           <% @validate = 0 %>
         <% end %>
-        <% if @event.allow_single && @count_vote <= 1 %>
+        <% if @my_event.allow_single && @count_vote <= 1 %>
           <% @validate = 0 %>
         <% end %>
         <% if @validate == 1 %>
           <%= link_to "Proceed to " + @next_position.name, page_vote_url(i: @member, p: @next_position), class: "btn btn-warning btn-lg" unless @next_position.nil? %>
-          <% if @event.referendums.where(active: 1).empty? %>
+          <% if @my_event.referendums.where(active: 1).empty? %>
             <%= link_to "Review your votes", vote_review_votes_path(m: @member), class: "btn btn-success btn-lg" if @next_position.nil? %>
           <% else %>
             <%= link_to "Referendum", new_referendum_response_path(i: @member), class: "btn btn-success btn-lg" if @next_position.nil? %>
@@ -40,7 +40,7 @@
     <div class="col-md-8">
       <div class="row">
         <% @candidates.sort_by(&:name).each do |can| %>
-          <% @vote = Vote.find_by(event: @event, member: @member, candidate: can.id) %>
+          <% @vote = Vote.find_by(event: @my_event, member: @member, candidate: can.id) %>
           <% if @vote.nil? %>
             <div class="col-lg-4 text-center">
               <div class="card mb-3" style="max-width:18rem;">

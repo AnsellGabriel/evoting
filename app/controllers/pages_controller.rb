@@ -18,7 +18,7 @@ class PagesController < ApplicationController
       # puts "@@@@ #{@member.vote_code}"
       @election.voter_code = @member.vote_code
     end
-    @position = Position.find(params[:p])
+    @position = @my_event.positions.first
     # raise "errors"
     respond_to do |format|
       if @election.save
@@ -40,6 +40,7 @@ class PagesController < ApplicationController
     # @event = Event.find(@member.event_id)
     @candidates = Candidate.where(position: @position, event: @my_event)
     @voted = Vote.where(position: @position, member: @member)
+    # raise "errors"
   end
 
   def vote_all
