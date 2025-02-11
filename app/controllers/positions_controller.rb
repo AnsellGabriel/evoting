@@ -24,7 +24,7 @@ class PositionsController < ApplicationController
   # POST /positions or /positions.json
   def create
     # @position = Position.new(position_params)
-    @event = Event.find(params[:v])
+    @event = @my_event
     @position = @event.positions.build(position_params)
     respond_to do |format|
       if @position.save
@@ -40,7 +40,6 @@ class PositionsController < ApplicationController
 
   # PATCH/PUT /positions/1 or /positions/1.json
   def update
-    
     respond_to do |format|
       if @position.update(position_params)
         format.html { redirect_to @event, notice: "Position was successfully updated." }
@@ -64,14 +63,15 @@ class PositionsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_position
-      @position = Position.find(params[:id])
-      @event = Event.find(@position.event_id)
-    end
 
-    # Only allow a list of trusted parameters through.
-    def position_params
-      params.require(:position).permit(:event_id, :name, :vacant)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_position
+    @position = Position.find(params[:id])
+    @event = Event.find(@position.event_id)
+  end
+
+  # Only allow a list of trusted parameters through.
+  def position_params
+    params.require(:position).permit(:event_id, :name, :vacant)
+  end
 end

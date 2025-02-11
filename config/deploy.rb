@@ -2,53 +2,51 @@
 lock "~> 3.17.1"
 
 # set :application, "evoting"
-set :application, "1cisp_evoting"
+set :application, "evoting"
 set :repo_url, "git@github.com:AnsellGabriel/evoting.git"
-set :rails_env, 'production' #
-set :branch, 'main' #
+set :rails_env, "production" #
+set :branch, "main" #
 
 # Deploy to the user's home directory
 set :deploy_to, "/home/deploy/#{fetch :application}"
 
 set :rbenv_type, :user #
-set :rbenv_ruby, '3.0.3' #
-set :rbenv_path, '/home/deploy/.rbenv' # 
+set :rbenv_ruby, "3.0.3" #
+set :rbenv_path, "/home/deploy/.rbenv" #
 
-append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', '.bundle', 'public/system', 'public/uploads'
-
+append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "vendor/bundle", ".bundle", "public/system", "public/uploads"
 
 # append :linked_files,  'config/credentials/production.key'
-append :linked_files, "config/master.key", "config/database.yml", "config/secrets.yml" 
- 
-namespace :deploy do  #
-    namespace :check do  #
-      before :linked_files, :set_keys do  #
-        on roles(:app), in: :sequence, wait: 10 do #
+append :linked_files, "config/master.key", "config/database.yml", "config/secrets.yml"
+
+namespace :deploy do #
+  namespace :check do #
+    before :linked_files, :set_keys do #
+      on roles(:app), in: :sequence, wait: 10 do #
         #   unless test("[ -f #{shared_path}/config/master.key ]")  #
         #     upload! 'config/master.key', "#{shared_path}/config/master.key"  #
         #   end  #
-          unless test("[ -f #{shared_path}/config/master.key ]")  #
-            upload! 'config/master.key', "#{shared_path}/config/master.key"  #
-          end  # 
-          unless test("[ -f #{shared_path}/config/secrets.yml ]") #
-            upload! 'config/secrets.yml', "#{shared_path}/config/secrets.yml" #
-          end  #
-          unless test("[ -f #{shared_path}/config/database.yml ]")  #
-            upload! 'config/database.yml', "#{shared_path}/config/database.yml"  #
-          end  #
-          # unless test("[ -f #{shared_path}/config/application.yml ]")  #
-          #   upload! 'config/application.yml', "#{shared_path}/config/application.yml"  #
-          # end  #
-          # unless test("[ -f #{shared_path}/config/initializers/meilisearch.rb ]")  #
-          #   upload! 'config/initializers/meilisearch.rb', "#{shared_path}/config/initializers/meilisearch.rb"  #
-          # end  #
-        end
+        unless test("[ -f #{shared_path}/config/master.key ]") #
+          upload! "config/master.key", "#{shared_path}/config/master.key"  #
+        end  #
+        unless test("[ -f #{shared_path}/config/secrets.yml ]") #
+          upload! "config/secrets.yml", "#{shared_path}/config/secrets.yml" #
+        end  #
+        unless test("[ -f #{shared_path}/config/database.yml ]") #
+          upload! "config/database.yml", "#{shared_path}/config/database.yml"  #
+        end  #
+        # unless test("[ -f #{shared_path}/config/application.yml ]")  #
+        #   upload! 'config/application.yml', "#{shared_path}/config/application.yml"  #
+        # end  #
+        # unless test("[ -f #{shared_path}/config/initializers/meilisearch.rb ]")  #
+        #   upload! 'config/initializers/meilisearch.rb', "#{shared_path}/config/initializers/meilisearch.rb"  #
+        # end  #
       end
     end
-  end#
+  end
+end #
 # Only keep the last 5 releases to save disk space
 set :keep_releases, 5
-
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp

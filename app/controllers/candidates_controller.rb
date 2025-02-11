@@ -4,7 +4,7 @@ class CandidatesController < ApplicationController
 
   # GET /candidates or /candidates.json
   def index
-    @candidates = Candidate.all
+    @candidates = Candidate.where(event: @my_event).all
   end
 
   # GET /candidates/1 or /candidates/1.json
@@ -19,7 +19,7 @@ class CandidatesController < ApplicationController
     # set_dummy_data
   end
 
-  def set_dummy_data 
+  def set_dummy_data
     @candidate.name = FFaker::Name.name
   end
 
@@ -30,7 +30,7 @@ class CandidatesController < ApplicationController
   # POST /candidates or /candidates.json
   def create
     # @candidate = Candidate.new(candidate_params)
-    @event = Event.find(params[:v])
+    @event = @my_event
     @candidate = @event.candidates.build(candidate_params)
     respond_to do |format|
       if @candidate.save
@@ -43,7 +43,6 @@ class CandidatesController < ApplicationController
       end
     end
   end
-
 
   # PATCH/PUT /candidates/1 or /candidates/1.json
   def update
@@ -71,14 +70,15 @@ class CandidatesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_candidate
-      @candidate = Candidate.find(params[:id])
-      @event = Event.find(@candidate.event_id)
-    end
 
-    # Only allow a list of trusted parameters through.
-    def candidate_params
-      params.require(:candidate).permit(:event_id, :position_id, :name, :remark, :picture)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_candidate
+    @candidate = Candidate.find(params[:id])
+    @event = Event.find(@candidate.event_id)
+  end
+
+  # Only allow a list of trusted parameters through.
+  def candidate_params
+    params.require(:candidate).permit(:event_id, :position_id, :name, :remark, :picture)
+  end
 end
