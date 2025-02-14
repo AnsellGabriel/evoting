@@ -3,8 +3,13 @@ class EventsController < ApplicationController
   before_action :set_event, only: %i[ show edit update destroy activate ]
 
   def activate
-    Event.update(active: 0)
+    Event.update(active: 0, election: 0)
     @event.update(active: 1)
+    if @event.active?
+      notice = "Event Activated"
+    else
+      notice = "Event Deactivated"
+    end
     return redirect_to events_url, notice: "Event Activated"
   end
 

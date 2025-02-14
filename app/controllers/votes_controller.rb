@@ -157,7 +157,7 @@ class VotesController < ApplicationController
   def result
     @event = Event.find_by(active: 1)
     @positions = Position.where(event: @my_event)
-    @count_voter = Member.where(voted: 1).count
+    @count_voter = Member.where(voted: 1, event: @my_event).count
   end
 
   private
