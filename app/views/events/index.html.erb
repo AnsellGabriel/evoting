@@ -7,18 +7,12 @@
   <% end %>
 </div>
 
-<table class ="table table-striped">
-  <table class="table table-borderless table-hover">
+  <table class="table table-hover">
     <thead>
       <tr class="border-top border-bottom border-primary">
 
       <th>#</th>
-        <th class="text-primary">Name</th>
-        <th class="text-primary">Description</th>
-        <th class="text-primary">Required Complete</th>
-        <th class="text-primary">Allow Single</th>
-        <th class="text-primary">Active</th>
-        <th class="text-primary">Election</th>
+        <th class="text-primary">Event</th>
         <th></th>
 
       </tr>
@@ -29,15 +23,12 @@
         <tr>
 
         <th scope="row"><%= event.id %></th>
-        <td><%= event.name %></td>
-        <td><%= event.description %></td>
-        <td><%= event.required_complete %></td>
-        <td><%= event.allow_single %></td>
-        <td><%= event.active %></td>
-        <td><%= event.election %></td>
-    
+        <td><%= content_tag :strong, event.name %> <br> <%= content_tag :span, "Active", class: "badge bg-success" if event.active? %> <%= content_tag :span, "Election Start", class: "badge bg-primary" if event.election? %> 
+        <%= content_tag :span, "Required Complete", class: "badge bg-warning text-dark" if event.required_complete? %> <%= content_tag :span, "Disable Singe Vote", class: "badge bg-warning text-dark" if event.allow_single? %><br>
+        <%= content_tag :small, event.description %></td>
           <td>
-            <%= link_to "Activate", activate_event_path(event), method: :post, class: "btn btn-success btn-sm" %>
+            <%= link_to "Activate", activate_event_path(event), method: :post, class: "btn btn-success btn-sm" unless event.active? %>
+            <%= link_to "Diactivate", activate_event_path(event), method: :post, class: "btn btn-danger btn-sm" if event.active? %>
             <%= link_to "View", event, class: "btn btn-secondary btn-sm" %>
             <%= link_to "Edit", edit_event_path(event), class: "btn btn-secondary btn-sm" %>
             <% #= link_to "Delete", event, class: "btn btn-danger btn-sm", method: :delete, data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>
