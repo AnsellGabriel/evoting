@@ -32,7 +32,6 @@
                     <%#= f.select :cooperative, prompt: "Select a cooperative", collection: Cooperative.order(:name), input_html: { class: 'form-select',  controller: "ts--select" }  %>
                     <%# end %>
                     <br class="mb-3">
-                    <p>evoting</p>
                     <%= link_to 'Vote', voter_code_path(p: event), class: 'btn btn-primary btn-lg' if event.election %>
                   </div>
                 </div>
