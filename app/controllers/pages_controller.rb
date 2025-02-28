@@ -35,7 +35,7 @@ class PagesController < ApplicationController
     @member = Member.find(params[:i])
     @position = Position.find(params[:p])
     @next = params[:p].to_i + 1
-    @next_position = Position.find_by(id: @next)
+    @next_position = Position.find_by(id: @next, event: @my_event)
     @count_vote = Vote.where(position: @position, member: @member).count
     # @event = Event.find(@member.event_id)
     @candidates = Candidate.where(position: @position, event: @my_event)
