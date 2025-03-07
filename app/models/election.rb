@@ -15,7 +15,7 @@ class Election < ApplicationRecord
     else
       if @member.voted
         if @member.user_id.present?
-          errors.add(:base, "Member already voted to #{@member.user.email}")
+          errors.add(:base, "Member already voted to #{@member.user.user_name}")
         else
           errors.add(:base, "Member already voted")
         end

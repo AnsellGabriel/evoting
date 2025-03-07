@@ -9,6 +9,14 @@
         <div class="form-inputs mb-5" style="text-align: center;">
           <div class="form-inputs mb-3">
             <%= @my_event.name %>
+            <% if current_user %>
+              <%= f.association :member,
+                                collection: Member.where(event: @my_event),
+                                label: "Member",
+                                error: "*Required",
+                                input_html: { data: { controller: "ts--select" } } %>
+            
+            <% end %>
             <%= f.input :voter_code, label: "Enter your voter code", input_html: { style: "text-align: center;" } %>
           </div>
           <div class="form-actions text-end">
