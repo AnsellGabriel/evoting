@@ -1,7 +1,11 @@
 <div class="container" style="height: 100vh;">
   <div class="row">
     <div class="col-md-6">
-      <div class="card mb-3 mt-5">
+      <div class="alert alert-primary" role="alert">
+        <%= content_tag :h4, "Single vote is not allowed" if @my_event.allow_single? %>
+        <%= content_tag :h4, "You must select the required number of candidates when casting your vote." if @my_event.required_complete? %>
+      </div>
+      <div class="card mb-3">
         <div class="card-header">Election</div>
         <div class="card-body">
           <%= content_tag :h3, @member.name %>

@@ -21,7 +21,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_10_083441) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", charset: "utf8mb4", force: :cascade do |t|
+  create_table "active_storage_blobs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -33,13 +33,13 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_10_083441) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "active_storage_variant_records", charset: "utf8mb4", force: :cascade do |t|
+  create_table "active_storage_variant_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "candidates", charset: "utf8mb4", force: :cascade do |t|
+  create_table "candidates", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "event_id", null: false
     t.bigint "position_id", null: false
     t.string "name"
@@ -50,7 +50,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_10_083441) do
     t.index ["position_id"], name: "index_candidates_on_position_id"
   end
 
-  create_table "elecoms", charset: "utf8mb4", force: :cascade do |t|
+  create_table "elecoms", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.string "position"
     t.datetime "created_at", null: false
@@ -59,7 +59,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_10_083441) do
     t.index ["event_id"], name: "index_elecoms_on_event_id"
   end
 
-  create_table "elections", charset: "utf8mb4", force: :cascade do |t|
+  create_table "elections", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "member_id"
     t.string "voter_code"
     t.string "station"
@@ -68,7 +68,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_10_083441) do
     t.index ["member_id"], name: "index_elections_on_member_id"
   end
 
-  create_table "events", charset: "utf8mb4", force: :cascade do |t|
+  create_table "events", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.text "description"
     t.boolean "required_complete"
@@ -79,7 +79,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_10_083441) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "members", charset: "utf8mb4", force: :cascade do |t|
+  create_table "members", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "event_id"
     t.string "name"
     t.string "description"
@@ -95,7 +95,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_10_083441) do
     t.index ["user_id"], name: "index_members_on_user_id"
   end
 
-  create_table "positions", charset: "utf8mb4", force: :cascade do |t|
+  create_table "positions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "event_id", null: false
     t.string "name"
     t.integer "vacant"
@@ -104,7 +104,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_10_083441) do
     t.index ["event_id"], name: "index_positions_on_event_id"
   end
 
-  create_table "referendum_responses", charset: "utf8mb4", force: :cascade do |t|
+  create_table "referendum_responses", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "member_id", null: false
     t.bigint "referendum_id"
     t.boolean "response"
@@ -114,7 +114,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_10_083441) do
     t.index ["referendum_id"], name: "index_referendum_responses_on_referendum_id"
   end
 
-  create_table "referendums", charset: "utf8mb4", force: :cascade do |t|
+  create_table "referendums", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "event_id", null: false
     t.string "proposal"
     t.boolean "active"
@@ -123,7 +123,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_10_083441) do
     t.index ["event_id"], name: "index_referendums_on_event_id"
   end
 
-  create_table "users", charset: "utf8mb4", force: :cascade do |t|
+  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -137,7 +137,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_10_083441) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  create_table "votes", charset: "utf8mb4", force: :cascade do |t|
+  create_table "votes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "event_id", null: false
     t.bigint "candidate_id", null: false
     t.bigint "member_id", null: false
