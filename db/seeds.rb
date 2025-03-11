@@ -39,15 +39,17 @@
 #     puts "MEMBER: #{mem.name} - SAVED!" if mem.save!
 # end
 
-event = Event.find(1)
-spreadsheet = Roo::Spreadsheet.open("./db/uploads/bideco/migs.xlsx")
-# (7..1642).each do |row|
-#     mem = Member.find_or_initialize_by(event: event, name: spreadsheet.cell(row, "C"))
+
+
+# event = Event.find(1)
+# spreadsheet = Roo::Spreadsheet.open("./db/uploads/pfcco mem.xlsx")
+# (8..78).each do |row|
+#     mem = Member.find_or_initialize_by(event: event, name: spreadsheet.cell(row, "B"))
 #     mem.voted = false
-#     mem.description = spreadsheet.cell(row, "B")
-#     mem.vote_code = spreadsheet.cell(row, "G")
+#     mem.description = "-"
+#     mem.vote_code = spreadsheet.cell(row, "A")
 #     puts "MEMBER: #{mem.name} (#{mem.vote_code}) - SAVED!" if mem.save!
 # end
-spreadsheet.each_with_pagename do |name, sheet|
-  puts "#{name}"
-end
+# spreadsheet.each_with_pagename do |name, sheet|
+#   puts "#{name}"
+# end
