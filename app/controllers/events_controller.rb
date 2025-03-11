@@ -1,6 +1,17 @@
 class EventsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_event, only: %i[ show edit update destroy ]
+  before_action :set_event, only: %i[ show edit update destroy activate ]
+
+  def activate
+    Event.update(active: 0, election: 0)
+    @event.update(active: 1)
+    if @event.active?
+      notice = "Event Activated"
+    else
+      notice = "Event Deactivated"
+    end
+    return redirect_to events_url, notice: "Event Activated"
+  end
 
   # GET /events or /events.json
   def index
@@ -59,13 +70,14 @@ class EventsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_event
-      @event = Event.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def event_params
-      params.require(:event).permit(:name, :description, :required_complete, :allow_single, :active, :election)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_event
+    @event = Event.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def event_params
+    params.require(:event).permit(:name, :description, :required_complete, :allow_single, :active, :election)
+  end
 end

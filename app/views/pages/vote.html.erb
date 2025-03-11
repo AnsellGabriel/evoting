@@ -1,7 +1,11 @@
 <div class="container" style="height: 100vh;">
   <div class="row">
     <div class="col-md-6">
-      <div class="card mb-3 mt-5">
+      <div class="alert alert-primary" role="alert">
+        <%= content_tag :h4, "Single vote is not allowed" if @my_event.allow_single? %>
+        <%= content_tag :h4, "You must select the required number of candidates when casting your vote." if @my_event.required_complete? %>
+      </div>
+      <div class="card mb-3">
         <div class="card-header">Election</div>
         <div class="card-body">
           <%= content_tag :h3, @member.name %>
@@ -16,22 +20,28 @@
           <%= content_tag :h5, "You can vote upto #{@position.vacant} candidate(s) " %>
         </div>
         <% @validate = 1 %>
-        <% if @event.required_complete && @count_vote != @position.vacant %>
+        <% if @my_event.required_complete && @count_vote != @position.vacant %>
           <% @validate = 0 %>
         <% end %>
-        <% if @event.allow_single && @count_vote <= 1 %>
-          <% @validate = 0 %>
+        <% if @position.vacant > 1 %>
+          <% if @my_event.allow_single && @count_vote <= 1 %>
+             <% @validate = 0 %>
+          <% end %>
+        <% else %>
+          <% if @my_event.allow_single && @count_vote == 0 %>
+             <% @validate = 0 %>
+          <% end %>
         <% end %>
         <% if @validate == 1 %>
-          <%= link_to "Proceed to " + @next_position.name, page_vote_url(i: @member, p: @next_position), class: 'btn btn-warning btn-lg' unless @next_position.nil? %>
-          <% if @event.referendums.where(active: 1).empty? %>
-            <%= link_to 'Review your votes', vote_review_votes_path(m: @member), class: 'btn btn-success btn-lg' if @next_position.nil? %>
+          <%= link_to "Proceed to " + @next_position.name, page_vote_url(i: @member, p: @next_position), class: "btn btn-warning btn-lg" unless @next_position.nil? %>
+          <% if @my_event.referendums.where(active: 1).empty? %>
+            <%= link_to "Review your votes", vote_review_votes_path(m: @member), class: "btn btn-success btn-lg" if @next_position.nil? %>
           <% else %>
-            <%= link_to 'Referendum', new_referendum_response_path(i: @member), class: 'btn btn-success btn-lg' if @next_position.nil? %>
+            <%= link_to "Referendum", new_referendum_response_path(i: @member), class: "btn btn-success btn-lg" if @next_position.nil? %>
           <% end %>
         <% end %>
         <% if @position.vacant == @candidates.count && @count_vote == 0 %>
-          <%= link_to 'Vote all', vote_all_votes_path(i: @member, p: @position), class: 'btn btn-success btn-lg' %>
+          <%= link_to "Vote all", vote_all_votes_path(i: @member, p: @position), class: "btn btn-success btn-lg" %>
         <% end %>
       </div>
     </div>
@@ -39,29 +49,28 @@
   <div class="row">
     <div class="col-md-8">
       <div class="row">
-        <%# @candidates.sort_by(&:name).each do |can| %>
-        <% @candidates.sort_by(&:id).each do |can| %>
-          <% @vote = Vote.find_by(event: @event, member: @member, candidate: can.id) %>
+        <% @candidates.sort_by(&:name).each do |can| %>
+          <% @vote = Vote.find_by(event: @my_event, member: @member, candidate: can.id) %>
           <% if @vote.nil? %>
             <div class="col-lg-4 text-center">
               <div class="card mb-3" style="max-width:18rem;">
-                <%# <div class="row g-0"> %>
-                  <%# <div class="col-md-4"> %>
+                <% # <div class="row g-0"> %>
+                  <% # <div class="col-md-4"> %>
                     <%= image_tag can.picture, width: "100%", height: "100%", class: " card-img-top" if can.picture.attached? %>
-                  <%# </div> %>
-                  <%# <div class="col-md-8"> %>
+                  <% # </div> %>
+                  <% # <div class="col-md-8"> %>
                     <div class="card-body">
                       <h4 class="card-title"><%= can.name %></h4>
                       <p class="card-text mb-0"><%= can.position %></p>
                       <small class="text-muted"><%= can.remark unless can.remark == "" %></small>
-                      <%#= can.votes.sum(:vote_amount) %>
+                      <% #= can.votes.sum(:vote_amount) %>
                       <div class="text-end">
-                        <%#= link_to  'Vote', new_vote_path(c: can, m: @member), class: 'btn btn-success', data: { turbo_frame: "remote_modal" }  %>
-                        <%= link_to  'Vote', save_vote_votes_path(c: can, m: @member), class: 'btn btn-primary' %>
+                        <% #= link_to "Vote", new_vote_path(c: can, m: @member), class: "btn btn-primary", data: { turbo_frame: "remote_modal" } %>
+                        <%= link_to "Vote", add_vote_member_path(@member, c: can), method: :post, class: "btn btn-warning" %>
                       </div>
                     </div>
-                  <%# </div> %>
-                <%# </div> %>
+                  <% # </div> %>
+                <% # </div> %>
               </div>
             </div>
           <% end %>
@@ -81,7 +90,7 @@
                   </div>
                   <div class="col-8">
                     <strong> <%= v.candidate %> </strong> <br>
-                    <%#= link_to "Remove", v, class: "btn btn-danger btn-sm", method: :delete, data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>
+                    <% #= link_to "Remove", v, class: "btn btn-danger btn-sm", method: :delete, data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>
                     <%= button_to "Remove", v, class: "btn btn-danger btn-sm", method: :delete, onclick: "return confirm('Are you sure?')" %>
                   </div>
                 </div>

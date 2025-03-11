@@ -10,46 +10,82 @@
 # (2..spreadsheet.last_row).each do |row|
 #     # coop = Cooperative.find_or_initialize_by(name: spreadsheet.cell(row, 'A'))
 #     # puts "#{coop.name}" if coop.save!
-    
+
 #     m = Member.find_or_initialize_by(vote_code: spreadsheet.cell(row, 'B'))
 #     m.event_id = 1
 #     m.name = spreadsheet.cell(row, 'A')
 #     m.description = spreadsheet.cell(row, 'C')
 #     # m.vote_power = 0
 #     puts "#{m.name}" if m.save!
-    
+
 # end
 
 # for i in 1..50
 #     mem = Member.find_or_initialize_by(name: FFaker::NamePH.name)
-#     code = SecureRandom.alphanumeric(4).upcase
+# code = SecureRandom.alphanumeric(4).upcase
 #     modified_string = code.gsub(/[1iO0I]/, "A")
 #     mem.vote_code = modified_string
 #     mem.event_id = 1
 #     puts "#{mem.name}" if mem.save!
 # end
 
-# event = Event.find(1)
-# spreadsheet = Roo::Spreadsheet.open("./db/uploads/kapit bisig evoting/LIST OF VOTERS.xlsx")
-# (4..spreadsheet.last_row).each do |row|
-#     mem = Member.find_or_initialize_by(event: event, name: spreadsheet.cell(row, "B"))
-#     mem.voted = false
-#     mem.description = ""
-#     mem.vote_code = "-"
-#     puts "MEMBER: #{mem.name} - SAVED!" if mem.save!
+# spreadsheet = Roo::Spreadsheet.open("./db/uploads/cofc_manila_names.xlsx")
+# (2..spreadsheet.last_row).each do |row|
+#   event = Event.find_by(active: 1)
+#   mem = Member.find_or_initialize_by(name: spreadsheet.cell(row, "B"), event: event)
+#   mem.event = event
+#   mem.name = spreadsheet.cell(row, "B")
+#   # mem.description = spreadsheet.cell(row, "C")
+#   # mem.vote_code = spreadsheet.cell(row, "C")
+#   loop do
+#     code = SecureRandom.alphanumeric(4).upcase
+#     modified_string = code.gsub(/[1iO0I]/, "A")
+#     if Member.exists?(vote_code: modified_string)
+#       puts "Code #{modified_string} already exists, generating new code..."
+#     else
+#       mem.vote_code = modified_string
+#       break
+#     end
+#   end
+#   # code = SecureRandom.alphanumeric(4).upcase
+#   # modified_string = code.gsub(/[1iO0I]/, "A")
+#   # mem.vote_code = modified_string
+#   puts "#{mem.name}" if mem.save!
 # end
 
-
-
-# event = Event.find(1)
-# spreadsheet = Roo::Spreadsheet.open("./db/uploads/pfcco mem.xlsx")
-# (8..78).each do |row|
-#     mem = Member.find_or_initialize_by(event: event, name: spreadsheet.cell(row, "B"))
-#     mem.voted = false
-#     mem.description = "-"
-#     mem.vote_code = spreadsheet.cell(row, "A")
-#     puts "MEMBER: #{mem.name} (#{mem.vote_code}) - SAVED!" if mem.save!
+# spreadsheet = Roo::Spreadsheet.open("./db/uploads/st_vincent_register.xlsx")
+# (2..spreadsheet.last_row).each do |row|
+#   mem = Member.find_by(name: spreadsheet.cell(row, "C"))
+#   if mem.present?
+#     mem.area = spreadsheet.cell(row, "D")
+#     puts "#{mem.name}" if mem.save!
+#   end
 # end
-# spreadsheet.each_with_pagename do |name, sheet|
-#   puts "#{name}"
+
+# SEED FFAKER MEMBERS
+# event = Event.find_by(active: 1)
+# vote_code = 1001
+
+# 10.times do
+#   member = Member.create!(
+#     name: FFaker::Name.name,
+#     event: event,
+#     voted: 0,
+#     vote_code: vote_code,
+#   )
+#   puts "#{member.name} has been created!"
+#   vote_code += 1
+# end
+
+# # SEED FFAKER CANDIDATE
+# event = Event.find_by(active: 1)
+# event.positions.each do |e|
+#   3.times do
+#     c = Candidate.create!(
+#       name: FFaker::Name.name,
+#       event: event,
+#       position_id: 6,
+#     )
+#     puts "#{c.name} has been created!"
+#   end
 # end

@@ -14,7 +14,7 @@ class VotesController < ApplicationController
     @event = Event.find_by(active: 1)
     @positions = Position.where(event: @event)
     results = Vote.group(:candidate_id).count
-    @graph = results.map { |candidate, count| [candidate, count]}
+    @graph = results.map { |candidate, count| [candidate, count] }
     @member = Member.where(event: @event).all
     # results_with_name = Vote.joins(:candidate).group('candidates.name').count
     # @graph_with_name = results_with_name.map { |candidate_name, count| [candidate_name, count] }
@@ -29,15 +29,14 @@ class VotesController < ApplicationController
     @vote.candidate = @candidate
     @vote.member = @member
     @vote.event_id = @member.event_id
-    @vote.position_id = @candidate.position_id
-    
+    @vote.position = @candidate.position
   end
 
   # GET /votes/1/edit
   def edit
   end
 
-  def save_vote 
+  def save_vote
     @vote = Vote.new
     @candidate = Candidate.find(params[:c])
     @position = Position.find(@candidate.position_id)
@@ -47,27 +46,28 @@ class VotesController < ApplicationController
     @vote.member = @member
     @vote.event = @event
     @vote.position = @candidate.position
-      respond_to do |format|
-        if @vote.save
-          format.html { redirect_to page_vote_path(i: @member, p: @candidate.position), notice: "Vote was successfully created." }
-          format.json { render :show, status: :created, location: @vote }
-        else
-          format.html { render :new, status: :unprocessable_entity }
-          format.json { render json: @vote.errors, status: :unprocessable_entity }
-          format.turbo_stream { render :form_update, status: :unprocessable_entity }
-        end
+    respond_to do |format|
+      if @vote.save
+        format.html { redirect_to page_vote_path(i: @member, p: @candidate.position), notice: "Vote was successfully created." }
+        format.json { render :show, status: :created, location: @vote }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @vote.errors, status: :unprocessable_entity }
+        format.turbo_stream { render :form_update, status: :unprocessable_entity }
       end
+    end
   end
-  def vote_all 
+
+  def vote_all
     @member = Member.find(params[:i])
     @position = Position.find(params[:p])
     @event = Event.find(@member.event_id)
     @candidates = Candidate.where(position: @position)
     @candidates.each do |can|
-      @vote = Vote.new 
-      @vote.candidate = can 
-      @vote.member = @member 
-      @vote.event = @event 
+      @vote = Vote.new
+      @vote.candidate = can
+      @vote.member = @member
+      @vote.event = @event
       @vote.position = @position
       @vote.save
     end
@@ -76,12 +76,13 @@ class VotesController < ApplicationController
       format.json { render :show, status: :created, location: @vote }
     end
   end
+
   # POST /votes or /votes.json
   def create
     @vote = Vote.new(vote_params)
     @member = @vote.member
     @position = @vote.position
-    raise "errors"
+    # raise "errors"
     respond_to do |format|
       if @vote.save
         format.html { redirect_to page_vote_url(i: @member, p: @position), notice: "Vote was successfully created." }
@@ -119,7 +120,7 @@ class VotesController < ApplicationController
     end
   end
 
-  def vote_review 
+  def vote_review
     @member = Member.find(params[:m])
     @event = Event.find_by(active: 1)
     @positions = Position.where(event: @event)
@@ -128,37 +129,46 @@ class VotesController < ApplicationController
     @referendums = ReferendumResponse.where(member: @member)
   end
 
-  def vote_final 
+  def vote_final
     @member = Member.find(params[:m])
+
     # @votes = Vote.where(event_hub: @event_hub, coop_event: @event_hub.coop_event)
-    @member.voted = 1
-    @member.vote_date = Date.today
-    respond_to do |format|
-      if @member.update(voted: 1, vote_date: Date.today) 
+
+    if current_user
+      # if @member.update!(voted: 1, vote_date: Time.now)
+      if @member.update!(voted: 1, vote_date: Time.now, user_id: current_user.id)
         @vote_update = Vote.where(member: @member)
         @vote_update.update_all(post: 1)
-        format.html { redirect_to vote_success_votes_path, notice: "Updated" }
+        redirect_to vote_success_votes_path
+      end
+    else
+      if @member.update!(voted: 1, vote_date: Date.today)
+        @vote_update = Vote.where(member: @member)
+        @vote_update.update_all(post: 1)
+        redirect_to vote_success_votes_path
       end
     end
   end
-  
-  def vote_success 
+
+  def vote_success
     @event = Event.find_by(active: 1)
   end
 
-  def result 
+  def result
     @event = Event.find_by(active: 1)
-    @positions = Position.where(event: @event)
-    @count_voter = Member.where(voted: 1).count
+    @positions = Position.where(event: @my_event)
+    @count_voter = Member.where(voted: 1, event: @my_event).count
   end
+
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_vote
-      @vote = Vote.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def vote_params
-      params.require(:vote).permit(:event_id, :candidate_id, :member_id, :position_id, :vote_amount, :station, :vote_code)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_vote
+    @vote = Vote.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def vote_params
+    params.require(:vote).permit(:event_id, :candidate_id, :member_id, :position_id, :vote_amount, :station, :vote_code)
+  end
 end

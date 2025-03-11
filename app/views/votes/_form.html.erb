@@ -4,10 +4,10 @@
   <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
 
   <div class="form-inputs">
-    <%#= f.association :event %>
-    <%#= f.association :candidate %>
-    <%#= f.association :member %>
-    <%#= f.association :position %>
+    <%= f.hidden_field :event %>
+    <%= f.hidden_field :candidate %>
+    <%= f.hidden_field :member %>
+    <%= f.hidden_field :position %>
     <%#= f.input :vote_amount %>
     <%#= f.input :station %>
   </div>
@@ -22,7 +22,7 @@
 
   <div class="form-actions text-end">
     <%= link_to "Back", page_vote_url(i: @member, p: @position), class: "btn btn-secondary" %>
-    <%= link_to "Vote", save_vote_votes_path(m: @vote.member, c: @vote.candidate), class: "btn btn-primary" %>
+    <%= link_to "Vote", save_vote_votes_path(m: @vote.member, c: @vote.candidate), class: "btn btn-success" %>
     <%#= f.button :submit, class: "btn btn-success" %>
   </div>
 <% end %>

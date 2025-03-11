@@ -2,11 +2,11 @@
 <div class="card">
   <div class="card-body">
     <%= content_tag :h2, @event.name %>
-    <%= content_tag :h4, 'Election Result' %>
+    <%= content_tag :h4, "Election Result" %>
     <% d = DateTime.now %>
-    <%# d.strftime("%d/%m/%y %H:%M") %>
-      <%= content_tag :p, d.strftime("%m/%d/%Y %H:%M")  %>
-      <%= content_tag :p, 'The result of the election are as follows:' %>
+    <% # d.strftime("%d/%m/%y %H:%M") %>
+      <%= content_tag :p, d.strftime("%m/%d/%Y %H:%M") %>
+      <%= content_tag :p, "The result of the election are as follows:" %>
       <% @positions.each do |pos| %>
         <%= content_tag :h4, pos.name, class: "text-primary" %>
         <div class="col-6">
@@ -18,8 +18,8 @@
               </tr>
             </thead>
             <tbody>
-              <%# @vote = Vote.group(:candidate_id).where(position: pos, post: 1).count %>
-              <% @vote = Vote.group(:candidate_id).where(position: pos, post: 1).order('count_id desc').count('id') %>
+              <% # @vote = Vote.group(:candidate_id).where(position: pos, post: 1).count %>
+              <% @vote = Vote.group(:candidate_id).where(position: pos, post: 1, event: @my_event).order("count_id desc").count("id") %>
               <% @vote.each do |v| %>
                 <tr>
                   <% @candidate = Candidate.find(v[0]) %>
@@ -56,8 +56,8 @@
         </div>
       <% end %>
       <p>Total number of voters <%= to_curr(@count_voter) %></p>
-      <%= content_tag :p, 'Certified by' %> <br>
-      <%= content_tag :p, '1CISP Representative' %>
+      <%= content_tag :p, "Certified by" %> <br>
+      <%= content_tag :p, "1CISP Representative" %>
       <% if @event.elecoms.present? %>
           <div class="col-6">
             <table class="table">
@@ -81,10 +81,10 @@
     <% else %>
       <div class="col d-flex justify-content-center">
       <div class="alert alert-warning mt-5" role="alert" style="width:800px">
-        <%= image_tag 'cooptechlogo.png', width: 200, class: 'mb-5 mb-lg-0 me-2' %>
+        <%= image_tag "cooptechlogo.png", width: 200, class: "mb-5 mb-lg-0 me-2" %>
         <h4 class="alert-heading">Election still ongoing</h4>
         <p>The results may only be viewed if the election is close.</p>
-        <p class="text-muted">To return to home press here <%= link_to 'home' , root_path, class: 'text-success' %> </p>
+        <p class="text-muted">To return to home press here <%= link_to "home", root_path, class: "text-success" %> </p>
       </div>
     </div>
     <% end %>

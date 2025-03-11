@@ -1,68 +1,79 @@
 class PagesController < ApplicationController
-  before_action :election_open, only: %i[voter_code vote]
+  def home
+    @events = Event.where(active: 1)
+  end
 
-  def home 
-      @events  = Event.where(active: 1)
+  def voter_code
+    @election = Election.new
   end
-  def voter_code 
-      @election = Election.new
-  end
-  def enter_code 
-    # raise 'errors'
-      # puts "@@@ create"
-      @election = Election.new(election_params)
-      if @election.member.nil?
-        @member = Member.find_by(vote_code: @election.voter_code)
-        # puts "@@@@ #{@member.vote_code}"
-      else 
-        @member = Member.find(@election.member_id)
-        # puts "@@@@ #{@member.vote_code}"
-        @election.voter_code = @member.vote_code
+
+  def enter_code
+    # puts "@@@ create"
+    @election = Election.new(election_params)
+    if @election.member.nil?
+      @member = Member.find_by(vote_code: @election.voter_code)
+      # puts "@@@@ #{@member.vote_code}"
+    else
+      @member = Member.find(@election.member_id)
+      # puts "@@@@ #{@member.vote_code}"
+      @election.voter_code = @member.vote_code
+    end
+    @position = @my_event.positions.first
+    # raise "errors"
+    respond_to do |format|
+      if @election.save
+        format.html { redirect_to page_vote_url(i: @member, p: @position), notice: "Member was successfully created." }
+        format.json { render :show, status: :created, location: @member }
+      else
+        format.html { render :voter_code, status: :unprocessable_entity }
+        format.json { render json: @member.errors, status: :unprocessable_entity }
       end
-      @position = Position.find(params[:p])
-      # raise "errors"
-      respond_to do |format|
-          if @election.save
-            format.html { redirect_to page_vote_url(i: @member, p: @position), notice: "Member was successfully created." }
-            format.json { render :show, status: :created, location: @member }
-          else
-            format.html { render :voter_code, status: :unprocessable_entity }
-            format.json { render json: @member.errors, status: :unprocessable_entity }
-          end
-        end
+    end
   end
 
-  def vote 
+  def vote
     @member = Member.find(params[:i])
     @position = Position.find(params[:p])
     @next = params[:p].to_i + 1
-    @next_position = Position.find_by(id: @next)
+    @next_position = Position.find_by(id: @next, event: @my_event)
     @count_vote = Vote.where(position: @position, member: @member).count
-    @event = Event.find(@member.event_id)
-    @candidates = Candidate.where(position: @position, event: @event)
+    # @event = Event.find(@member.event_id)
+    @candidates = Candidate.where(position: @position, event: @my_event)
     @voted = Vote.where(position: @position, member: @member)
+    # raise "errors"
   end
 
-  def vote_all 
+  def vote_all
     @member = Member.find(params[:i])
     @position = Position.find(params[:p])
     @event = Event.find(@member.event_id)
     @candidates = Candidate.where(position: @position, event: @event)
     @candidates.each do |can|
+<<<<<<< HEAD
       
+=======
+>>>>>>> da9d7a1ef4359043960eb73fe683c0f2c9065165
     end
   end
 
   private
+<<<<<<< HEAD
   # Use callbacks to share common setup or constraints between actions.
   def set_member
   #   @member = Member.find(params[:id])
+=======
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_member
+    #   @member = Member.find(params[:id])
+>>>>>>> da9d7a1ef4359043960eb73fe683c0f2c9065165
   end
 
   # Only allow a list of trusted parameters through.
   def election_params
     params.require(:election).permit(:member_id, :voter_code, :station)
   end
+<<<<<<< HEAD
 
   def election_open
     @event = Event.find_by(election: true)
@@ -71,3 +82,6 @@ class PagesController < ApplicationController
     end
   end
 end
+=======
+end
+>>>>>>> da9d7a1ef4359043960eb73fe683c0f2c9065165

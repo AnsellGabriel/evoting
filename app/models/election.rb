@@ -8,18 +8,26 @@ class Election < ApplicationRecord
     # raise 'errors'
     @event = Event.find_by(active: 1)
     @member = Member.find_by(event: @event, vote_code: voter_code)
+<<<<<<< HEAD
     # @member = Member.find(member_id)
     # raise 'errors'
     unless @event.election 
       errors.add(:base,"Election is now close")   
+=======
+    unless @event.election
+      errors.add(:base, "Election is now close")
+>>>>>>> da9d7a1ef4359043960eb73fe683c0f2c9065165
     end
     if @member.nil?
-      errors.add(:base,"Voter code not valid")   
+      errors.add(:base, "Voter code not valid")
     else
       if @member.voted
-        errors.add(:base,"Member already voted")
+        if @member.user_id.present?
+          errors.add(:base, "Member already voted to #{@member.user.user_name}")
+        else
+          errors.add(:base, "Member already voted")
+        end
       end
     end
-    
   end
 end
