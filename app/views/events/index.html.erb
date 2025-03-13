@@ -24,7 +24,8 @@
 
         <th scope="row"><%= event.id %></th>
         <td><%= content_tag :strong, event.name %> <br> <%= content_tag :span, "Active", class: "badge bg-success" if event.active? %> <%= content_tag :span, "Election Start", class: "badge bg-primary" if event.election? %> 
-        <%= content_tag :span, "Required Complete", class: "badge bg-warning text-dark" if event.required_complete? %> <%= content_tag :span, "Disable Singe Vote", class: "badge bg-warning text-dark" if event.allow_single? %><br>
+        <%= content_tag :span, "Required Complete", class: "badge bg-warning text-dark" if event.required_complete? %> <%= content_tag :span, "Disable Singe Vote", class: "badge bg-warning text-dark" if event.allow_single? %>
+        <%= content_tag :span, "Minimum Vote", class: "badge bg-warning text-dark" if event.min_vote? %><br>
         <%= content_tag :small, event.description %></td>
           <td>
             <%= link_to "Activate", activate_event_path(event), method: :post, class: "btn btn-success btn-sm" unless event.active? %>
