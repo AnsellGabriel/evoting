@@ -19,10 +19,19 @@
         <div class="alert alert-info" role="alert">
           <%= content_tag :h5, "You can vote upto #{@position.vacant} candidate(s) " %>
         </div>
+        <% # REQUIRED COMPLETE %>
         <% @validate = 1 %>
         <% if @my_event.required_complete && @count_vote != @position.vacant %>
           <% @validate = 0 %>
         <% end %>
+        <% # SINGLE VOTE DISABLE %>
+        <% if @my_event.min_vote? %>
+          <% if @count_vote < @position.min_vote %>
+            <% @validate = 0 %>
+          <% end %>
+        <% end %>
+
+        <% # SINGLE VOTE DISABLE %>
         <% if @position.vacant > 1 %>
           <% if @my_event.allow_single && @count_vote <= 1 %>
              <% @validate = 0 %>

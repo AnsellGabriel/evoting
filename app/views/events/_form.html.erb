@@ -6,10 +6,13 @@
   <div class="form-inputs">
     <%= f.input :name %>
     <%= f.input :description %>
-    <%= f.input :required_complete %>
-    <%= f.input :allow_single, label: "Single vote disable" %>
-    <%= f.input :active %>
-    <%= f.input :election %>
+    <div class="form-check form-switch">
+      <%= f.input :required_complete %>
+      <%= f.input :allow_single, label: "Single vote disable" %>
+      <%= f.input :min_vote, label: "Minimum vote" %>
+      <%= f.input :active %>
+      <%= f.input :election %>
+    </div>
   </div>
 
   <div class="form-actions text-end">

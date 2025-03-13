@@ -25,12 +25,12 @@
           </div>
           <div class="col-6">
             <div class="text-end">
-              <%= link_to "New Position",new_position_path(v: @event), class: 'btn btn-primary', data: { turbo_frame: "remote_modal" } %>
+              <%= link_to "New Position", new_position_path(v: @event), class: "btn btn-primary", data: { turbo_frame: "remote_modal" } %>
             </div>
           </div>
         </div>
         <br>
-        <%= render 'positions/show_position' %>
+        <%= render "positions/show_position", event: @event %>
       </div>
       <div class="col-md-6">
         <div class="row">
@@ -39,12 +39,12 @@
           </div>
           <div class="col-6">
             <div class="text-end">
-              <%= link_to "New Candidate",new_candidate_path(v: @event), class: 'btn btn-primary', data: { turbo_frame: "remote_modal" } %>
+              <%= link_to "New Candidate", new_candidate_path(v: @event), class: "btn btn-primary", data: { turbo_frame: "remote_modal" } %>
             </div>
           </div>
         </div>
         <br>
-        <%= render 'candidates/show_candidate' %>
+        <%= render "candidates/show_candidate" %>
       </div>
     </div>
   </div>
