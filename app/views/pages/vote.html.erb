@@ -4,6 +4,7 @@
       <div class="alert alert-primary" role="alert">
         <%= content_tag :h4, "Single vote is not allowed" if @my_event.allow_single? %>
         <%= content_tag :h4, "You must select the required number of candidates when casting your vote." if @my_event.required_complete? %>
+        <%= content_tag :h4, "You are allowed up to a minimum of #{@position.min_vote} votes." if @my_event.min_vote? %>
       </div>
       <div class="card mb-3">
         <div class="card-header">Election</div>
@@ -18,6 +19,7 @@
         <%= content_tag :h3, @position.name, class: "text-primary" %>
         <div class="alert alert-info" role="alert">
           <%= content_tag :h5, "You can vote upto #{@position.vacant} candidate(s) " %>
+          <%= content_tag :h6, "Minimum vote #{@position.min_vote}" if @my_event.min_vote? %>
         </div>
         <% # REQUIRED COMPLETE %>
         <% @validate = 1 %>
