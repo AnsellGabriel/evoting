@@ -29,7 +29,7 @@
 #     puts "#{mem.name}" if mem.save!
 # end
 
-spreadsheet = Roo::Spreadsheet.open("./db/uploads/iwahori_2025.xlsx")
+spreadsheet = Roo::Spreadsheet.open("./db/uploads/san_felipe_2025.xlsx")
 (2..spreadsheet.last_row).each do |row|
   event = Event.find_by(active: 1)
   mem = Member.find_or_initialize_by(name: spreadsheet.cell(row, "A"), event: event)
