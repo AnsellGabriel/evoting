@@ -29,22 +29,23 @@
 #     puts "#{mem.name}" if mem.save!
 # end
 
-spreadsheet = Roo::Spreadsheet.open("./db/uploads/san_felipe_2025.xlsx")
+spreadsheet = Roo::Spreadsheet.open("./db/uploads/kapit_bisig_2025.xlsx")
 (2..spreadsheet.last_row).each do |row|
   event = Event.find_by(active: 1)
-  mem = Member.find_or_initialize_by(name: spreadsheet.cell(row, "A"), event: event)
-  mem.vote_code = spreadsheet.cell(row, "B")
+  mem = Member.find_or_initialize_by(name: spreadsheet.cell(row, "B"), event: event)
+  # mem.vote_code = spreadsheet.cell(row, "B")
   # mem.vote_code = spreadsheet.cell(row, "C")
-  # loop do
-  #   code = SecureRandom.alphanumeric(4).upcase
-  #   modified_string = code.gsub(/[1iO0I]/, "A")
-  #   if Member.exists?(vote_code: modified_string)
-  #     puts "Code #{modified_string} already exists, generating new code..."
-  #   else
-  #     mem.vote_code = modified_string
-  #     break
-  #   end
-  # end
+  mem.description = spreadsheet.cell(row, "A")
+  loop do
+    code = SecureRandom.alphanumeric(4).upcase
+    modified_string = code.gsub(/[1iO0I]/, "A")
+    if Member.exists?(vote_code: modified_string)
+      puts "Code #{modified_string} already exists, generating new code..."
+    else
+      mem.vote_code = modified_string
+      break
+    end
+  end
   # code = SecureRandom.alphanumeric(4).upcase
   # modified_string = code.gsub(/[1iO0I]/, "A")
   # mem.vote_code = modified_string
@@ -62,7 +63,7 @@ end
 
 # SEED FFAKER MEMBERS
 # event = Event.find_by(active: 1)
-# vote_code = 1001
+# vote_code = 1011
 
 # 10.times do
 #   member = Member.create!(
