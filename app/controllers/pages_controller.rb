@@ -49,39 +49,18 @@ class PagesController < ApplicationController
     @event = Event.find(@member.event_id)
     @candidates = Candidate.where(position: @position, event: @event)
     @candidates.each do |can|
-<<<<<<< HEAD
-      
-=======
->>>>>>> da9d7a1ef4359043960eb73fe683c0f2c9065165
     end
   end
 
   private
-<<<<<<< HEAD
-  # Use callbacks to share common setup or constraints between actions.
-  def set_member
-  #   @member = Member.find(params[:id])
-=======
 
   # Use callbacks to share common setup or constraints between actions.
   def set_member
     #   @member = Member.find(params[:id])
->>>>>>> da9d7a1ef4359043960eb73fe683c0f2c9065165
   end
 
   # Only allow a list of trusted parameters through.
   def election_params
     params.require(:election).permit(:member_id, :voter_code, :station)
   end
-<<<<<<< HEAD
-
-  def election_open
-    @event = Event.find_by(election: true)
-    if @event.nil?
-      render file: "#{Rails.root}/public/404.html", status: :not_found
-    end
-  end
 end
-=======
-end
->>>>>>> da9d7a1ef4359043960eb73fe683c0f2c9065165
