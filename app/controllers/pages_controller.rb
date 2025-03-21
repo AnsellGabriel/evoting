@@ -10,8 +10,8 @@ class PagesController < ApplicationController
   def enter_code
     # puts "@@@ create"
     @election = Election.new(election_params)
+    @member = @my_event.members.find_by(vote_code: @election.voter_code)
     if @election.member.nil?
-      @member = Member.find_by(vote_code: @election.voter_code)
       # puts "@@@@ #{@member.vote_code}"
     else
       @member = Member.find(@election.member_id)
@@ -33,6 +33,7 @@ class PagesController < ApplicationController
 
   def vote
     @member = Member.find(params[:i])
+    # raise "error"
     @position = Position.find(params[:p])
     @next = params[:p].to_i + 1
     @next_position = Position.find_by(id: @next, event: @my_event)
