@@ -131,6 +131,12 @@ class VotesController < ApplicationController
     @referendums = ReferendumResponse.where(member: @member)
   end
 
+  def vote_check
+    @event = Event.find_by(active: 1)
+    @member = @event.members.find(params[:m])
+    @positions = @event.positions
+  end
+
   def vote_final
     @event = Event.find_by(active: 1)
     @member = @event.members.find(params[:m])

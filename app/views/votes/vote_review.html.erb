@@ -5,7 +5,7 @@
   Please check your votes.
 </div>
 <div class="text-end mb-3">
-  <%= link_to '<i class="bi bi-box-seam"></i> Save Votes'.html_safe , vote_final_votes_path(m: @member), class: 'btn btn-success btn-lg' %>
+  <%= link_to '<i class="bi bi-box-seam"></i> Save Votes'.html_safe, vote_final_votes_path(m: @member), class: "btn btn-success btn-lg" unless @member.voted.present? || @member.voted? %>
 </div>
 <div class="row">
   <% @positions.each do |p| %>
@@ -13,7 +13,7 @@
       <div class="card mb-2">
         <div class="card-header">
           <strong class="text-primary"> <%= p.name %> </strong><br>
-          <%= link_to "Change", page_vote_url(i: @member, p: p), class: 'btn btn-warning btn-sm' %>
+          <%= link_to "Change", page_vote_url(i: @member, p: p), class: "btn btn-warning btn-sm" %>
         </div>
         <% @votes = Vote.where(position: p, member: @member) %>
         <ul class="list-group list-group-flush">
@@ -35,14 +35,14 @@
   <% end %>
 </div>
 <% if @event.referendums.present? %>
-    <% i  = 1 %>
+    <% i = 1 %>
     <div class="row">
       <div class="col-md-6">
         <table class="table table-light table-border table-hover">
           <thead>
             <tr>
               <th>#</th>
-              <th>Referendum <%= link_to 'Change', new_referendum_response_path(i: @member), class: "btn btn-warning btn-sm" %></th>
+              <th>Referendum <%= link_to "Change", new_referendum_response_path(i: @member), class: "btn btn-warning btn-sm" %></th>
               <th>Answer</th>
             </tr>
           </thead>
@@ -59,7 +59,7 @@
                     <% end %>
                   </td>
                 </tr>
-                <% i += 1%>
+                <% i += 1 %>
             <% end %>
           </tbody>
         </table>

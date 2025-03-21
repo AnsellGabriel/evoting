@@ -21,6 +21,12 @@ class PagesController < ApplicationController
     @position = @my_event.positions.first
     # raise "errors"
     respond_to do |format|
+      # raise "error"
+      if @member.present?
+        if @member.voted?
+          format.html { redirect_to vote_check_votes_path(m: @member), notice: "Member was successfully created." }
+        end
+      end
       if @election.save
         format.html { redirect_to page_vote_url(i: @member, p: @position), notice: "Member was successfully created." }
         format.json { render :show, status: :created, location: @member }
