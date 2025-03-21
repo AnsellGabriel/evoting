@@ -122,6 +122,7 @@ class VotesController < ApplicationController
 
   def vote_review
     @event = Event.find_by(active: 1)
+
     @member = @event.members.find(params[:m])
 
     @positions = Position.where(event: @event)
@@ -133,7 +134,7 @@ class VotesController < ApplicationController
   def vote_final
     @event = Event.find_by(active: 1)
     @member = @event.members.find(params[:m])
-    raise "error"
+    # raise "error"
     # @votes = Vote.where(event_hub: @event_hub, coop_event: @event_hub.coop_event)
 
     if current_user
