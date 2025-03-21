@@ -11,6 +11,8 @@
       <%= content_tag :span, @my_event.name if @my_event.present? %>
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <%= link_to "Home", root_path, class: "nav-link" %>
+        <%= link_to "Vote", voter_code_path(p: @my_event), class: "nav-link" if @my_event.present? %>
+        <%= link_to "My Event", @my_event, class: "nav-link" %>
         <% #= link_to "Dashboard", dash_board_registrations_path, class: "nav-link" %>
         <% #= link_to "Evaluate", root_path, class: "nav-link" %>
         <li class="nav-item dropdown">

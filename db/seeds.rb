@@ -52,15 +52,35 @@
 #   # mem.vote_code = modified_string
 #   puts "#{mem.name}" if mem.save!
 # end
-
-# spreadsheet = Roo::Spreadsheet.open("./db/uploads/st_vincent_register.xlsx")
+# spreadsheet = Roo::Spreadsheet.open("./db/uploads/san_felipe_2025.xlsx")
 # (2..spreadsheet.last_row).each do |row|
-#   mem = Member.find_by(name: spreadsheet.cell(row, "C"))
-#   if mem.present?
-#     mem.area = spreadsheet.cell(row, "D")
-#     puts "#{mem.name}" if mem.save!
-#   end
+#   event = Event.find_by(active: 1)
+#   mem = Member.find_or_initialize_by(name: spreadsheet.cell(row, "A"), event: event)
+#   mem.vote_code = spreadsheet.cell(row, "B")
+#   # mem.vote_code = spreadsheet.cell(row, "C")
+#   # loop do
+#   #   code = SecureRandom.alphanumeric(4).upcase
+#   #   modified_string = code.gsub(/[1iO0I]/, "A")
+#   #   if Member.exists?(vote_code: modified_string)
+#   #     puts "Code #{modified_string} already exists, generating new code..."
+#   #   else
+#   #     mem.vote_code = modified_string
+#   #     break
+#   #   end
+#   # end
+#   # code = SecureRandom.alphanumeric(4).upcase
+#   # modified_string = code.gsub(/[1iO0I]/, "A")
+#   # mem.vote_code = modified_string
+#   puts "#{mem.name} - #{mem.vote_code}" if mem.save!
 # end
+
+spreadsheet = Roo::Spreadsheet.open("./db/uploads/LIST OF VOTERS 2025.xlsx")
+event = Event.find(11)
+(2..spreadsheet.last_row).each do |row|
+  mem = Member.find_or_initialize_by(name: spreadsheet.cell(row, "B"), event: event, vote_code: spreadsheet.cell(row, "C"))
+  mem.description = mem.vote_code
+  mem.save!
+end
 
 # SEED FFAKER MEMBERS
 # event = Event.find_by(active: 1)
@@ -77,14 +97,14 @@
 #   vote_code += 1
 # end
 
-# # SEED FFAKER CANDIDATE
+# SEED FFAKER CANDIDATE
 # event = Event.find_by(active: 1)
-# event.positions.each do |e|
+# event.positions.each do |p|
 #   3.times do
 #     c = Candidate.create!(
 #       name: FFaker::Name.name,
 #       event: event,
-#       position_id: 6,
+#       position: p,
 #     )
 #     puts "#{c.name} has been created!"
 #   end

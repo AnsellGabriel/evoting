@@ -11,7 +11,7 @@
             <%= @my_event.name %>
             <% if current_user %>
               <%= f.association :member,
-                                collection: Member.where(event: @my_event),
+                                collection: @my_event.members,
                                 label: "Member",
                                 error: "*Required",
                                 input_html: { data: { controller: "ts--select" } } %>
