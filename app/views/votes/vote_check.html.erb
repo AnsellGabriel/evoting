@@ -1,0 +1,33 @@
+<%= content_tag :h3, @event.name, class: "text-primary" %>
+<hr>
+<div class="alert alert-success" role="alert">
+  <i class="bi bi-check-circle"></i>
+    <strong><%= @member.name %></strong> already voted. <br>
+  <%= @member.vote_date %>
+</div>
+<div class="row">
+  <% @positions.each do |p| %>
+    <div class="col-md-3">
+      <div class="card mb-2">
+        <div class="card-header">
+          <strong class="text-primary"> <%= p.name %> </strong><br>
+        </div>
+        <% @votes = Vote.where(position: p, member: @member) %>
+        <ul class="list-group list-group-flush">
+          <% @votes.each do |v| %>
+            <li class="list-group-item">
+              <div class="row">
+                <div class="col-4">
+                  <%= image_tag v.candidate.picture, width: "100%", height: "50", class: "img-fluid rounded-start" if v.candidate.picture.attached? %>
+                </div>
+                <div class="col-8">
+                  <strong> <%= v.candidate %> </strong> 
+                </div>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+</div>

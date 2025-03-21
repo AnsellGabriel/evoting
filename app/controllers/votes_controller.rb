@@ -121,17 +121,26 @@ class VotesController < ApplicationController
   end
 
   def vote_review
-    @member = Member.find(params[:m])
     @event = Event.find_by(active: 1)
+
+    @member = @event.members.find(params[:m])
+
     @positions = Position.where(event: @event)
 
     # @referendum_response = ReferendumResponse.new
     @referendums = ReferendumResponse.where(member: @member)
   end
 
-  def vote_final
-    @member = Member.find(params[:m])
+  def vote_check
+    @event = Event.find_by(active: 1)
+    @member = @event.members.find(params[:m])
+    @positions = @event.positions
+  end
 
+  def vote_final
+    @event = Event.find_by(active: 1)
+    @member = @event.members.find(params[:m])
+    # raise "error"
     # @votes = Vote.where(event_hub: @event_hub, coop_event: @event_hub.coop_event)
 
     if current_user
