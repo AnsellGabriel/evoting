@@ -10,19 +10,23 @@ class PagesController < ApplicationController
   def enter_code
     # puts "@@@ create"
     @election = Election.new(election_params)
-    if @election.member.nil?
-      @member = Member.find_by(vote_code: @election.voter_code)
-      # puts "@@@@ #{@member.vote_code}"
-    else
-      @member = Member.find(@election.member_id)
-      # puts "@@@@ #{@member.vote_code}"
-      @election.voter_code = @member.vote_code
-    end
+
+    # if @election.member.nil?
+    #   @member = Member.find_by(vote_code: @election.voter_code)
+    #   # puts "@@@@ #{@member.vote_code}"
+    # else
+    #   @member = Member.find(@election.member_id)
+    #   # puts "@@@@ #{@member.vote_code}"
+    #   # @election.voter_code = @member.vote_code
+    # end
+
+    @member = Member.find_by(name: @election.member&.name, vote_code: @election.voter_code)
+    return redirect_to root_path, alert: "You are not allowed to vote online. Please vote on the designated voting area." if @member&.area == "NATIONAL CAPITAL REGION" && !current_user
     @position = @my_event.positions.first
     # raise "errors"
     respond_to do |format|
       if @election.save
-        format.html { redirect_to page_vote_url(i: @member, p: @position), notice: "Member was successfully created." }
+        format.html { redirect_to page_vote_url(i: @member, p: @position) }
         format.json { render :show, status: :created, location: @member }
       else
         format.html { render :voter_code, status: :unprocessable_entity }
@@ -33,6 +37,7 @@ class PagesController < ApplicationController
 
   def vote
     @member = Member.find(params[:i])
+    return redirect_to root_path, alert: "Member already voted" if @member.vote_date.present? || @member.voted?
     @position = Position.find(params[:p])
     @next = params[:p].to_i + 1
     @next_position = Position.find_by(id: @next, event: @my_event)

@@ -1,6 +1,6 @@
 class MembersController < ApplicationController
   include Pagy::Backend
-  # before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:add_vote]
   before_action :set_member, only: %i[ show edit update destroy cancel_vote add_vote ]
 
   def add_vote

@@ -19,7 +19,7 @@
             </thead>
             <tbody>
               <% # @vote = Vote.group(:candidate_id).where(position: pos, post: 1).count %>
-              <% @vote = Vote.group(:candidate_id).where(position: pos, post: 1, event: @my_event).order("count_id desc").count("id") %>
+              <% @vote = Vote.joins(:member).group(:candidate_id).where(position: pos, post: 1, event: @my_event, member: {voted: 1}).order("count_id desc").count("id") %>
               <% @vote.each do |v| %>
                 <tr>
                   <% @candidate = Candidate.find(v[0]) %>

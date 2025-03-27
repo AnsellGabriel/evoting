@@ -122,6 +122,8 @@ class VotesController < ApplicationController
 
   def vote_review
     @member = Member.find(params[:m])
+    return redirect_to root_path, alert: "Member already voted" if @member.vote_date.present? || @member.voted?
+
     @event = Event.find_by(active: 1)
     @positions = Position.where(event: @event)
 
@@ -142,7 +144,10 @@ class VotesController < ApplicationController
         redirect_to vote_success_votes_path
       end
     else
-      if @member.update!(voted: 1, vote_date: Date.today)
+      is_head_office = ["CENTRAL OFFICE"].include?(@member.area)
+
+      if @member.update!(voted: is_head_office ? 0 : 1, vote_date: Date.today)
+        @member.update!(description: "Voted online") if is_head_office
         @vote_update = Vote.where(member: @member)
         @vote_update.update_all(post: 1)
         redirect_to vote_success_votes_path

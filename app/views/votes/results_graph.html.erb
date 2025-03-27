@@ -4,8 +4,14 @@
         <% #= column_chart @graph %>
         <%= content_tag :h3, @event.name %> 
     </div>
+    <div class="alert alert-primary" role="alert">
+       <strong></strong> <h3><i class="bi bi-receipt-cutoff"></i>      Total number of voters: <%= to_curr(@member.count) %></h3>
+    </div>
     <div class="alert alert-success" role="alert">
-       <strong></strong> <h3><i class="bi bi-receipt-cutoff"></i>      Members have already voted: <%= to_curr(@member.where(voted: 1).count) %></h3>
+       <strong></strong> <h3><i class="bi bi-receipt-cutoff mb-2"></i>      Members have already voted: <%= "#{to_curr(@member.where(voted: 1).count)} ( #{number_to_percentage((@member.where(voted: 1).count.to_f / @member.count) * 100)} ) " %> </h3>
+              <strong></strong> <h3>( On-site: <%= to_curr(@member.where(voted: 1).where.not(user_id: nil).count) %> ) </h3>
+       <strong></strong> <h3>   ( Online: <%= to_curr(@member.where(voted: 1, user_id: nil).count) %> )</h3>
+
     </div>
     <div class="mb-3">
         <% #= column_chart @graph_with_name %>
@@ -15,8 +21,8 @@
                         <div class="card mb-3">
                             <%= content_tag :h4, pos.name, class: "card-header text-primary" %>
                             <div class="card-body">
-                                <% @vote = Vote.joins(:candidate).group("candidates.name").where(position: pos, post: 1, event: @my_event).count("id") %>
-                                <% results = Vote.group(:candidate_id).where(position: pos, post: 1, event: @my_event).count %>
+                                <% @vote = Vote.joins(:candidate, :member).group("candidates.name").where(position: pos, post: 1, event: @my_event, member: {voted: 1}).count("id") %>
+                                <% results = Vote.joins(:member).group(:candidate_id).where(position: pos, post: 1, event: @my_event, member: {voted: 1}).count %>
                                 <% @graph = results.map { |candidate, count| [candidate, count] } %>
                                 <% # results_with_name = Vote.joins(:candidate).group('candidates.name').count %>
                                 <% @graph_with_name = @vote.map { |candidate_name, count| [candidate_name, count] } %>
@@ -29,5 +35,4 @@
                 <% end %>
             </div>
     </div>
-    <p>Loading</p>
  <% end %>

@@ -29,11 +29,12 @@
 #     puts "#{mem.name}" if mem.save!
 # end
 
-spreadsheet = Roo::Spreadsheet.open("./db/uploads/iwahori_2025.xlsx")
+spreadsheet = Roo::Spreadsheet.open("db/uploads/PSA_2025.xlsx")
 (2..spreadsheet.last_row).each do |row|
   event = Event.find_by(active: 1)
-  mem = Member.find_or_initialize_by(name: spreadsheet.cell(row, "A"), event: event)
-  mem.vote_code = spreadsheet.cell(row, "B")
+  mem = Member.find_or_initialize_by(name: spreadsheet.cell(row, "B"), event: event)
+  mem.vote_code = spreadsheet.cell(row, "A")
+  mem.area = spreadsheet.cell(row, "C")
   # mem.vote_code = spreadsheet.cell(row, "C")
   # loop do
   #   code = SecureRandom.alphanumeric(4).upcase
