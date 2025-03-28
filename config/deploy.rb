@@ -15,7 +15,7 @@ set :rbenv_type, :user #
 set :rbenv_ruby, "3.0.3" #
 set :rbenv_path, "/home/deploy/.rbenv" #
 
-append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "vendor/bundle", ".bundle", "public/system", "public/uploads"
+append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "vendor/bundle", "vents.bundle", "public/system", "public/uploads"
 
 # append :linked_files,  'config/credentials/production.key'
 append :linked_files, "config/master.key", "config/database.yml", "config/secrets.yml"

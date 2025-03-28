@@ -10,6 +10,9 @@
           <p>
             <strong>Name:</strong>
             <%= event.name %>
+              <% if !event.election %>
+                <%= link_to "Generate Votes", event_path(event, format: :xlsx), class: "btn btn-warning btn-sm mt-3", data: { "turbo-method": :get, turbo_confirm: "Generate votes?" } %>
+              <% end %>
           </p>
           <p>
             <%= event.description %>

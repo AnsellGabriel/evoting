@@ -28,7 +28,7 @@
                                 <% @graph_with_name = @vote.map { |candidate_name, count| [candidate_name, count] } %>
 
                                 <%= column_chart @graph_with_name unless @event.election? %>
-                                <%= column_chart @graph if @event.election? %>
+                                <%= column_chart @graph, xtitle: "Candidates", ytitle: "Vote Count" if @event.election? %>
                             </div>
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 class MembersController < ApplicationController
   include Pagy::Backend
   before_action :authenticate_user!, except: [:add_vote]
-  before_action :set_member, only: %i[ show edit update destroy cancel_vote add_vote ]
+  before_action :set_member, only: %i[ show edit update destroy cancel_vote add_vote approve_vote]
 
   def add_vote
     # @event = Event.find_by(active: 1)
@@ -71,6 +71,10 @@ class MembersController < ApplicationController
         format.turbo_stream { render :form_update, status: :unprocessable_entity }
       end
     end
+  end
+
+  def approve_vote
+    redirect_to @member, notice: "Member's vote approved." if @member.update(voted: 1)
   end
 
   def cancel_vote

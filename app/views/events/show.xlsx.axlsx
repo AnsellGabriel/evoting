@@ -1,0 +1,28 @@
+wb = xlsx_package.workbook
+styles = wb.styles
+
+header_style = styles.add_style(
+  b: true, # Bold text
+  bg_color: "000000", # Dark background color (Hex code)
+  fg_color: "FFFFFF", # White text
+  alignment: { horizontal: :center } # Center text
+)
+
+wb.add_worksheet(name: "PSEMCO Vote List") do |sheet|
+  sheet.add_row ["Passbook No.", "Member's Name", "Branch", "Station", "Voted?", "BOD", "AUDIT COM", "CREDIT COM"], style: header_style
+
+  @event.members.includes(votes: :position).sort_by { |m| m.name }.each do |m|
+    next if m.vote_date.nil?
+
+    sheet.add_row [
+      m.vote_code,
+      m.name,
+      m.area.upcase,
+      m.user.present? ? m.user.user_name.upcase : "ONLINE",
+      m.voted ? "YES" : "INVALID",
+      m.votes.joins(:position).where(position: {name: "BOARD OF DIRECTORS"}).map {|v| v.candidate.name},
+      m.votes.joins(:position).where(position: {name: "AUDIT COMMITTEE"}).map {|v| v.candidate.name},
+      m.votes.joins(:position).where(position: {name: "CREDIT COMMITTEE"}).map {|v| v.candidate.name},
+    ]
+  end
+end

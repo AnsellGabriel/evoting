@@ -29,7 +29,7 @@
         <tr class="border-top border-bottom border-primary">
           <th>#</th>
           <th class="text-primary">Name</th>
-          <th class="text-primary">VoteCode</th>
+          <th class="text-primary">Passbook No.</th>
           <th class="text-primary">Voted</th>
           <th class="text-primary">Vote Date</th>
           <th class="text-primary">Station</th>
@@ -46,7 +46,7 @@
             <td><%= member.vote_code  %></td>
             <td><%= member.voted %></td>
             <td><%= member.vote_date %></td>
-            <td><%= member.station %></td>
+            <td><%= member.user&.user_name %></td>
             <td>
               <%= link_to 'View', member, class: 'btn btn-secondary btn-sm' %>
               <%= link_to 'Edit', edit_member_path(member), class: 'btn btn-secondary btn-sm', data: { turbo_frame: "remote_modal" } %>

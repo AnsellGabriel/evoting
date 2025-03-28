@@ -91,3 +91,4 @@ gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
 gem 'chartkick'
 gem 'pry'
 
+gem 'caxlsx_rails'

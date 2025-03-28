@@ -5,7 +5,7 @@
     <%= content_tag :h4, "Election Result" %>
     <% d = DateTime.now %>
     <% # d.strftime("%d/%m/%y %H:%M") %>
-      <%= content_tag :p, d.strftime("%m/%d/%Y %H:%M") %>
+      <%= content_tag :p, d.in_time_zone('Asia/Manila').strftime("%m/%d/%Y %H:%M") %>
       <%= content_tag :p, "The result of the election are as follows:" %>
       <% @positions.each do |pos| %>
         <%= content_tag :h4, pos.name, class: "text-primary" %>

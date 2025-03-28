@@ -20,6 +20,13 @@ class EventsController < ApplicationController
 
   # GET /events/1 or /events/1.json
   def show
+    respond_to do |format|
+      format.html
+      format.xlsx {
+        filename = "VOTE_LIST.xlsx"
+        response.headers['Content-Disposition'] = "attachment; filename=\"#{filename}\""
+      }
+    end
   end
 
   # GET /events/new

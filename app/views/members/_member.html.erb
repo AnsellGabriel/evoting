@@ -19,6 +19,9 @@
  
   <%# page_vote_url(i: @member, p: @position) %>
    <%#= link_to "Vote", page_vote_path(i: @member, p: 1), class: "btn btn-primary" %>
+   <% if member.vote_date.present? && !member.voted %>
+    <%= link_to "Approve Vote", approve_vote_member_path(@member), class: "btn btn-success", data: {turbo_method: :patch, turbo_confirm: "Approve members vote?"} %>
+   <% end %>
    <%= link_to "Cancel Vote", cancel_vote_member_path(@member), class: "btn btn-primary", onclick: "return confirm('Are you sure?')" %>
   
 </div>

@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   resources :members do
     get "cancel_vote", to: "members#cancel_vote", on: :member
     get :add_vote, on: :member
+    patch :approve_vote, on: :member
   end
   resources :positions
   resources :events do

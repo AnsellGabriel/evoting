@@ -5,7 +5,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <a class="navbar-brand text-light" href="#">
-        <%= image_tag "assembly_logo.png", width: 200, class: "mb-2 mb-lg-0 me-2" %>
+        <%= image_tag "psemco.png", width: 100, class: "mb-2 mb-lg-0 me-2" %>
         <%= content_tag :span, " DEMO VERSION", class: "fw-bold text-danger" if ["localhost:3000", "demo.1cisp.org"].include?(request.host_with_port) %>
       </a>
       <%= content_tag :span, @my_event.name if @my_event.present? %>
