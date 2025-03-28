@@ -1,4 +1,5 @@
 class VotesController < ApplicationController
+  before_action :authenticate_user!, only: [:index]
   before_action :set_vote, only: %i[ show edit update destroy ]
 
   # GET /votes or /votes.json
