@@ -2,11 +2,11 @@
 lock "~> 3.17.1"
 
 # set :application, "evoting"
-set :application, "evoting"
+set :application, "sacred_heart"
 # set :application, "st_vincent"
 set :repo_url, "git@github.com:AnsellGabriel/evoting.git"
 set :rails_env, "production" #
-set :branch, "main" #
+set :branch, "psemco" #
 
 # Deploy to the user's home directory
 set :deploy_to, "/home/deploy/#{fetch :application}"

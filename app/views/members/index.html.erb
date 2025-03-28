@@ -42,7 +42,7 @@
           <tr>
             <th scope="row"><%= member.id %></th>
             <td><%= member.name %> <br>
-              <small><%= member.description %></small> </td>
+              <small><%= " #{member.area}  #{member.description.present? ? "| #{member.description}" : ''} " %></small> </td>
             <td><%= member.vote_code  %></td>
             <td><%= member.voted %></td>
             <td><%= member.vote_date %></td>
