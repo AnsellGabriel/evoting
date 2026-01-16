@@ -14,7 +14,7 @@ set :branch, "main" #
 set :deploy_to, "/home/deploy/#{fetch :application}"
 
 set :rbenv_type, :user #
-set :rbenv_ruby, "3.0.3" #
+set :rbenv_ruby, "3.2.2" #
 set :rbenv_path, "/home/deploy/.rbenv" #
 
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "vendor/bundle", ".bundle", "public/system", "public/uploads"

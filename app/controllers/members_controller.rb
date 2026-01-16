@@ -4,6 +4,36 @@ class MembersController < ApplicationController
   # before_action :authenticate_user!
   before_action :set_member, only: %i[ show edit update destroy cancel_vote add_vote ]
 
+  def download
+    @members = @my_event.members.order(:name)
+    respond_to do |format|
+      format.csv do
+        send_data Member.to_csv(@members),
+                  filename: "members-#{Date.today}.csv"
+      end
+      format.html { redirect_to members_path }
+    end
+  end
+
+  def import
+    file = params[:file]
+    if file.present?
+      spreadsheet = Roo::Spreadsheet.open(file)
+      header = spreadsheet.row(1)
+      (2..spreadsheet.last_row).each do |row|
+        # raise "error" 
+        # row_data = Hash[[header, spreadsheet.row(row)].transpose]
+        member = Member.find_or_initialize_by(name: spreadsheet.cell(row, "A"), event: @my_event)
+        member.description = spreadsheet.cell(row, "B") if spreadsheet.cell(row, "B").present?
+        member.vote_code = spreadsheet.cell(row, "C") if spreadsheet.cell(row, "C").present?
+        member.save!
+        # puts "#{member.name} - #{member.vote_code}" 
+      end
+    end
+    # Member.import(params[:file])
+    redirect_to members_path, notice: "Members were successfully imported."
+  end
+
   def add_vote
     # @event = Event.find_by(active: 1)
     @candidate = Candidate.find(params[:c])
@@ -19,7 +49,7 @@ class MembersController < ApplicationController
 
   # GET /members or /members.json
   def index
-    @q = Member.where(event: @my_event).ransack(params[:q])
+    @q = @my_event.members.ransack(params[:q])
     @pagy, @members = pagy(@q.result(distinct: true).order(created_at: :desc), items: 10)
     # @members = Member.all
   end

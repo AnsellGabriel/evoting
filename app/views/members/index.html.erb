@@ -1,60 +1,151 @@
-<%= content_tag :h1, "List of Members" %>
-<%#= search_form_for @q, data: { turbo_frame: :results } do |f| %>
-  <%# # Search if the name field contains... %>
-  <%#= f.label :nameof_cont %>
-  <%#= f.search_field :nameof_cont %>
-  <%#= f.submit %>
-<%# end %>
-<%= search_form_for @q do |f| %>
-
-  <%# # Search if the name field contains... %>
-  <%= f.label :name_cont %>
-  <%= f.search_field :name_cont %>
-
-  <%= f.submit %>
-<% end %>
-<div class="pag-bar mt-5 pt-5">
-  <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <%= content_tag :h1, "List of Members", class: "mb-0" %>
+  <div class="btn-group">
+    <%= link_to new_member_path, class: 'btn btn-primary', data: { turbo_frame: "remote_modal" } do %>
+      <i class="bi bi-plus-circle"></i> New Member
+    <% end %>
+    <button type="button" class="btn btn-success" data-bs-toggle="collapse" data-bs-target="#importForm" aria-expanded="false" aria-controls="importForm">
+      <i class="bi bi-upload"></i> Import Members
+    </button>
+    <%= link_to download_members_path(format: :csv), class: "btn btn-outline-secondary" do %>
+      <i class="bi bi-download"></i> Download CSV
+    <% end %>
+  </div>
 </div>
-<%#== pagy_nav(@pagy) if @pagy.pages > 1 %>
-<div class="text-end mb-3">
-  <%= link_to new_member_path, class: 'btn btn-primary', data: { turbo_frame: "remote_modal" } do %>
-    New Member
-  <% end %>
+
+<div class="collapse mb-4" id="importForm">
+  <div class="card border-success">
+    <div class="card-header bg-success text-white">
+      <h5 class="mb-0">
+        <i class="bi bi-file-earmark-spreadsheet"></i> Import Members from Excel
+      </h5>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-info mb-3">
+        <strong>File Format:</strong> Excel file (.xlsx, .xls) with the following columns:
+        <ul class="mb-0 mt-2">
+          <li><strong>Column A:</strong> Name (required)</li>
+          <li><strong>Column B:</strong> Description (optional)</li>
+          <li><strong>Column C:</strong> Vote Code (optional)</li>
+        </ul>
+        <small class="d-block mt-2">Note: The first row should contain headers and will be skipped.</small>
+      </div>
+      <%= form_with url: import_members_path, method: :post, multipart: true, class: "row g-3" do |f| %>
+        <div class="col-md-8">
+          <%= f.file_field :file, accept: ".xlsx,.xls", class: "form-control", required: true %>
+          <div class="form-text">Select an Excel file to import</div>
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <%= f.submit "Import Members", class: "btn btn-success w-100" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <%= search_form_for @q, html: { class: "row g-3" } do |f| %>
+      <div class="col-md-10">
+        <%= f.label :name_cont, "Search by Name", class: "form-label" %>
+        <%= f.search_field :name_cont, class: "form-control", placeholder: "Enter member name..." %>
+      </div>
+      <div class="col-md-2 d-flex align-items-end">
+        <%= f.submit "Search", class: "btn btn-outline-primary w-100" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
 <%= turbo_frame_tag :result do %>
-  <table class ="table table-striped">
-    <table class="table table-borderless table-hover">
-      <thead>
-        <tr class="border-top border-bottom border-primary">
-          <th>#</th>
-          <th class="text-primary">Name</th>
-          <th class="text-primary">VoteCode</th>
-          <th class="text-primary">Voted</th>
-          <th class="text-primary">Vote Date</th>
-          <th class="text-primary">Station</th>
-          <th></th>
-        </tr>
-      </thead>
-     
-      <tbody>
-        <% @members.each do |member| %>
-          <tr>
-            <th scope="row"><%= member.id %></th>
-            <td><%= member.name %> <br>
-              <small><%= member.description %></small> </td>
-            <td><%= member.vote_code  %></td>
-            <td><%= member.voted %></td>
-            <td><%= member.vote_date %></td>
-            <td><%= member.station %></td>
-            <td>
-              <%= link_to 'View', member, class: 'btn btn-secondary btn-sm' %>
-              <%= link_to 'Edit', edit_member_path(member), class: 'btn btn-secondary btn-sm', data: { turbo_frame: "remote_modal" } %>
-              <%= link_to "Delete", member, class: "btn btn-danger btn-sm", method: :delete, data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+  <div class="card">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th class="text-primary" style="width: 60px;">#</th>
+              <th class="text-primary">Name</th>
+              <th class="text-primary">Vote Code</th>
+              <th class="text-primary text-center" style="width: 100px;">Status</th>
+              <th class="text-primary">Vote Date</th>
+              <th class="text-primary">Station</th>
+              <th class="text-end" style="width: 200px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if @members.any? %>
+              <% @members.each do |member| %>
+                <tr>
+                  <th scope="row" class="fw-normal"><%= member.id %></th>
+                  <td>
+                    <div class="fw-semibold"><%= member.name %></div>
+                    <% if member.description.present? %>
+                      <small class="text-muted"><%= member.description %></small>
+                    <% end %>
+                  </td>
+                  <td>
+                    <span class="badge bg-secondary"><%= member.vote_code %></span>
+                  </td>
+                  <td class="text-center">
+                    <% if member.voted == 1 || member.voted == true %>
+                      <span class="badge bg-success">
+                        <i class="bi bi-check-circle"></i> Voted
+                      </span>
+                    <% else %>
+                      <span class="badge bg-warning text-dark">
+                        <i class="bi bi-clock"></i> Pending
+                      </span>
+                    <% end %>
+                  </td>
+                  <td>
+                    <% if member.vote_date.present? %>
+                      <%= member.vote_date.strftime("%B %d, %Y") rescue member.vote_date %>
+                    <% else %>
+                      <span class="text-muted">—</span>
+                    <% end %>
+                  </td>
+                  <td>
+                    <% if member.station.present? %>
+                      <%= member.station %>
+                    <% else %>
+                      <span class="text-muted">—</span>
+                    <% end %>
+                  </td>
+                  <td>
+                    <div class="btn-group btn-group-sm" role="group">
+                      <%= link_to member, class: 'btn btn-outline-secondary', title: "View" do %>
+                        <i class="bi bi-eye"></i>
+                      <% end %>
+                      <%= link_to edit_member_path(member), class: 'btn btn-outline-primary', data: { turbo_frame: "remote_modal" }, title: "Edit" do %>
+                        <i class="bi bi-pencil"></i>
+                      <% end %>
+                      <%= link_to member, class: "btn btn-outline-danger", method: :delete, data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" }, title: "Delete" do %>
+                        <i class="bi bi-trash"></i>
+                      <% end %>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            <% else %>
+              <tr>
+                <td colspan="7" class="text-center py-5">
+                  <div class="text-muted">
+                    <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+                    <p class="mt-3 mb-0">No members found</p>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% if @pagy.pages > 1 %>
+  <div class="d-flex justify-content-center mt-4">
+    <%== pagy_bootstrap_nav(@pagy) %>
   </div>
 <% end %>

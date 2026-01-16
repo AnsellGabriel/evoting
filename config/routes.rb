@@ -1,4 +1,4 @@
-Rails.application.routes.draw do
+  Rails.application.routes.draw do
   resources :referendums do
     post :submit_answers, on: :collection
   end
@@ -13,12 +13,15 @@ Rails.application.routes.draw do
     get "result", to: "votes#result", on: :collection
     get "vote_all", to: "votes#vote_all", on: :collection
     get "results_graph", on: :collection
+    get "pdf_download", to: "votes#pdf_download", on: :collection
   end
   resources :candidates
   resources :elecoms
   resources :members do
     get "cancel_vote", to: "members#cancel_vote", on: :member
     get :add_vote, on: :member
+    post :import, on: :collection
+    get :download, on: :collection
   end
   resources :positions
   resources :events do

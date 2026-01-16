@@ -1,93 +1,219 @@
 <% unless @event.election %>
-<div class="card">
-  <div class="card-body">
-    <%= content_tag :h2, @event.name %>
-    <%= content_tag :h4, "Election Result" %>
-    <% d = DateTime.now %>
-    <% # d.strftime("%d/%m/%y %H:%M") %>
-      <%= content_tag :p, d.strftime("%m/%d/%Y %H:%M") %>
-      <%= content_tag :p, "The result of the election are as follows:" %>
-      <% @positions.each do |pos| %>
-        <%= content_tag :h4, pos.name, class: "text-primary" %>
-        <div class="col-6">
-          <table class="table table-bordered table-hover">
-            <thead>
-              <tr>
-                <th> Name </th>
-                <th> Votes </th>
-              </tr>
-            </thead>
-            <tbody>
-              <% # @vote = Vote.group(:candidate_id).where(position: pos, post: 1).count %>
-              <% @vote = Vote.group(:candidate_id).where(position: pos, post: 1, event: @my_event).order("count_id desc").count("id") %>
-              <% @vote.each do |v| %>
-                <tr>
-                  <% @candidate = Candidate.find(v[0]) %>
-                  <td> <%= @candidate %> </td>
-                  <td> <%= to_curr(v[1]) %> </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
+  <div class="card shadow-lg border-0 mb-4">
+    <div class="card-header bg-primary text-white py-4">
+      <div class="d-flex justify-content-between align-items-center flex-wrap">
+        <div>
+          <h2 class="mb-1 fw-bold"><i class="bi bi-trophy-fill me-2"></i><%= @event.name %></h2>
+          <h5 class="mb-0 opacity-75"><i class="bi bi-clipboard-check me-2"></i>Election Results</h5>
         </div>
-      <% end %>
-      <% if @event.referendums.present? %>
-        <%= content_tag :h4, "Referendum", class: "text-primary" %>
-        <div class="col-md-8">
-            <table class="table table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th> Proposal </th>
-                    <th> Oo </th>
-                    <th> Hindi </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% @event.referendums.each do |r| %>
-                    <tr>
-                      <% ref_result = ReferendumResponse.where(referendum: r) %>
-                      <td><%= r %></td>
-                      <td><%= ref_result.where(response: 1).count %></td>
-                      <td><%= ref_result.where(response: 0).count %></td>
-                    </tr>
-                  <% end %>
-                </tbody>
-            </table>
-        </div>
-      <% end %>
-      <p>Total number of voters <%= to_curr(@count_voter) %></p>
-      <%= content_tag :p, "Certified by" %> <br>
-      <%= content_tag :p, "1CISP Representative" %>
-      <% if @event.elecoms.present? %>
-          <div class="col-6">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Election Committee</th>
-                  <th>Sign & Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @event.elecoms.each do |e| %>
-                      <tr>
-                        <td><%= e.name %></td>
-                        <td></td>
-                      </tr>
-                <% end %>
-              </tbody>
-            </table>
-          </div>
-      <% end %>
-    <% else %>
-      <div class="col d-flex justify-content-center">
-      <div class="alert alert-warning mt-5" role="alert" style="width:800px">
-        <%= image_tag "cooptechlogo.png", width: 200, class: "mb-5 mb-lg-0 me-2" %>
-        <h4 class="alert-heading">Election still ongoing</h4>
-        <p>The results may only be viewed if the election is close.</p>
-        <p class="text-muted">To return to home press here <%= link_to "home", root_path, class: "text-success" %> </p>
+        <%= link_to pdf_download_votes_path, class: "btn btn-light btn-lg mt-2 mt-md-0", target: "_blank" do %>
+          <i class="bi bi-file-earmark-pdf-fill me-2"></i>Download PDF
+        <% end %>
       </div>
     </div>
-    <% end %>
+    
+    <div class="card-body p-4">
+      <div class="mb-4 pb-3 border-bottom">
+        <p class="text-muted mb-2">
+          <i class="bi bi-calendar3 me-2"></i>
+          <strong>Generated:</strong> <%= DateTime.now.strftime("%B %d, %Y at %I:%M %p") %>
+        </p>
+        <p class="lead mb-0">The results of the election are as follows:</p>
+      </div>
+
+      <!-- Election Results Section -->
+      <div class="mb-5">
+        <% @positions.each_with_index do |pos, index| %>
+          <div class="mb-5 <%= 'pb-4 border-bottom' unless index == @positions.count - 1 %>">
+            <h4 class="text-primary mb-4 fw-bold">
+              <i class="bi bi-person-badge me-2"></i><%= pos.name %>
+            </h4>
+            <div class="row">
+              <div class="col-lg-8 col-xl-7">
+                <div class="table-responsive">
+                  <table class="table table-hover table-striped align-middle shadow-sm">
+                    <thead class="table-primary">
+                      <tr>
+                        <th scope="col" class="fw-semibold">
+                          <i class="bi bi-person-circle me-2"></i>Candidate Name
+                        </th>
+                        <th scope="col" class="text-end fw-semibold">
+                          <i class="bi bi-check-circle me-2"></i>Votes
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% @vote = Vote.group(:candidate_id).where(position: pos, post: 1, event: @my_event).order("count_id desc").count("id") %>
+                      <% if @vote.any? %>
+                        <% @vote.each_with_index do |v, idx| %>
+                          <% @candidate = Candidate.find(v[0]) %>
+                          <tr class="<%= 'table-success' if idx == 0 %>">
+                            <td>
+                              <% if idx == 0 %>
+                                <i class="bi bi-trophy-fill text-warning me-2"></i>
+                              <% end %>
+                              <strong><%= @candidate %></strong>
+                            </td>
+                            <td class="text-end">
+                              <span class="badge bg-primary rounded-pill fs-6 px-3 py-2">
+                                <%= to_curr(v[1]) %>
+                              </span>
+                            </td>
+                          </tr>
+                        <% end %>
+                      <% else %>
+                        <tr>
+                          <td colspan="2" class="text-center text-muted py-4">
+                            <i class="bi bi-inbox me-2"></i>No votes recorded
+                          </td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Referendum Section -->
+      <% if @event.referendums.present? %>
+        <div class="mb-5 pb-4 border-bottom">
+          <h4 class="text-primary mb-4 fw-bold">
+            <i class="bi bi-file-text me-2"></i>Referendum Results
+          </h4>
+          <div class="row">
+            <div class="col-lg-10 col-xl-9">
+              <div class="table-responsive">
+                <table class="table table-hover table-bordered align-middle shadow-sm">
+                  <thead class="table-info">
+                    <tr>
+                      <th scope="col" class="fw-semibold">
+                        <i class="bi bi-question-circle me-2"></i>Proposal
+                      </th>
+                      <th scope="col" class="text-center fw-semibold">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>Oo (Yes)
+                      </th>
+                      <th scope="col" class="text-center fw-semibold">
+                        <i class="bi bi-x-circle-fill text-danger me-2"></i>Hindi (No)
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @event.referendums.each do |r| %>
+                      <% ref_result = ReferendumResponse.where(referendum: r) %>
+                      <% yes_count = ref_result.where(response: 1).count %>
+                      <% no_count = ref_result.where(response: 0).count %>
+                      <% total = yes_count + no_count %>
+                      <tr>
+                        <td><strong><%= r %></strong></td>
+                        <td class="text-center">
+                          <span class="badge bg-success rounded-pill fs-6 px-3 py-2">
+                            <%= yes_count %>
+                            <% if total > 0 %>
+                              <small class="ms-1">(<%= ((yes_count.to_f / total) * 100).round(1) %>%)</small>
+                            <% end %>
+                          </span>
+                        </td>
+                        <td class="text-center">
+                          <span class="badge bg-danger rounded-pill fs-6 px-3 py-2">
+                            <%= no_count %>
+                            <% if total > 0 %>
+                              <small class="ms-1">(<%= ((no_count.to_f / total) * 100).round(1) %>%)</small>
+                            <% end %>
+                          </span>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Voter Statistics -->
+      <div class="mb-5">
+        <div class="card bg-light border-0">
+          <div class="card-body">
+            <h5 class="card-title mb-3">
+              <i class="bi bi-people-fill me-2 text-primary"></i>Voting Statistics
+            </h5>
+            <p class="mb-0 fs-5">
+              <strong>Total number of voters:</strong> 
+              <span class="badge bg-primary fs-5 px-3 py-2 ms-2">
+                <%= to_curr(@count_voter) %>
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Certification Section -->
+      <div class="mb-4">
+        <h5 class="mb-3 fw-bold">
+          <i class="bi bi-shield-check me-2 text-success"></i>Certification
+        </h5>
+        <p class="mb-3"><strong>Certified by:</strong></p>
+        <p class="mb-4"><strong>1CISP Representative</strong></p>
+        
+        <% if @event.elecoms.present? %>
+          <div class="row">
+            <div class="col-lg-8 col-xl-7">
+              <div class="table-responsive">
+                <table class="table table-bordered align-middle">
+                  <thead class="table-secondary">
+                    <tr>
+                      <th scope="col" class="fw-semibold">
+                        <i class="bi bi-person-badge me-2"></i>Election Committee
+                      </th>
+                      <th scope="col" class="fw-semibold text-center">
+                        <i class="bi bi-pen me-2"></i>Sign & Date
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @event.elecoms.each do |e| %>
+                      <tr>
+                        <td><%= e.name %></td>
+                        <td class="text-center text-muted" style="min-height: 50px;">
+                          <small class="text-muted">Signature</small>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
-</div>
+
+<% else %>
+  <!-- Election Ongoing Message -->
+  <div class="row d-flex justify-content-center">
+    <div class="col-lg-8 col-xl-7">
+      <div class="card shadow-lg border-0 mt-5">
+        <div class="card-body text-center p-5">
+          <%= image_tag "cooptechlogo.png", width: 200, class: "mb-4" %>
+          <div class="alert alert-warning border-0 shadow-sm" role="alert">
+            <h4 class="alert-heading mb-3">
+              <i class="bi bi-clock-history me-2"></i>Election Still Ongoing
+            </h4>
+            <p class="mb-3">The results may only be viewed once the election is closed.</p>
+            <hr>
+            <p class="mb-0">
+              <i class="bi bi-house-door me-2"></i>
+              To return to home, <%= link_to "click here", root_path, class: "alert-link fw-bold" %>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
 

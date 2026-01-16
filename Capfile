@@ -1,7 +1,7 @@
 
 
 set :rbenv_type, :user
-set :rbenv_ruby, '3.0.3vi /etc/profile'
+set :rbenv_ruby, '3.2.2'
 # Load DSL and set up stages
 require "capistrano/setup"
 

@@ -1,6 +1,12 @@
 class VotesController < ApplicationController
   before_action :set_vote, only: %i[ show edit update destroy ]
 
+  def pdf_download
+  
+    pdf = ResultPdf.new(@my_event, view_context)
+    # pdf.text "Hello World"
+    send_data(pdf.render, filename: "#{@my_event.name}_voters_list.pdf", type: "application/pdf", disposition: "inline")
+  end 
   # GET /votes or /votes.json
   def index
     @votes = Vote.all

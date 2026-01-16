@@ -1,6 +1,14 @@
 class PagesController < ApplicationController
   def home
-    @events = Event.where(active: 1)
+    if @my_event.nil?
+      if current_user.nil?
+        redirect_to new_user_session_path
+      else
+        redirect_to events_path
+      end
+    else
+      @events = Event.where(active: 1)
+    end
   end
 
   def voter_code
