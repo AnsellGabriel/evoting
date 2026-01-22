@@ -30,7 +30,7 @@
         <%= content_tag :small, event.description %> </td>
           <td>
             <%= link_to "Activate", activate_event_path(event), method: :post, class: "btn btn-success btn-sm" unless event.active? %>
-            <%= link_to "Diactivate", activate_event_path(event), method: :post, class: "btn btn-danger btn-sm" if event.active? %>
+            <%= link_to "Deactivate", activate_event_path(event), method: :post, class: "btn btn-danger btn-sm" if event.active? %>
             <%= link_to "View", event, class: "btn btn-secondary btn-sm" %>
             <%= link_to "Edit", edit_event_path(event), class: "btn btn-secondary btn-sm" %>
             <% #= link_to "Delete", event, class: "btn btn-danger btn-sm", method: :delete, data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>

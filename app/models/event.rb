@@ -1,11 +1,12 @@
 class Event < ApplicationRecord
-    has_many :positions
-    has_many :candidates 
-    has_many :members
-    has_many :referendums
-    has_many :elecoms
+  has_many :positions, dependent: :destroy
+  has_many :candidates, dependent: :destroy
+  has_many :members, dependent: :destroy
+  has_many :referendums, dependent: :destroy
+  has_many :elecoms, dependent: :destroy
+  has_many :votes, dependent: :destroy
 
-    def to_s 
-        name
-      end
+  def to_s
+    name
+  end
 end
