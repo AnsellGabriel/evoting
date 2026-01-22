@@ -78,6 +78,7 @@ end
 
 gem 'simple_form'
 gem 'bootstrap', '~> 5.2.3'
+gem 'ffi', '>= 1.16.0'  # Required for darwin25 (macOS Sequoia) compatibility
 gem "roo", "~> 2.9.0"
 gem "jquery-rails"
 gem "image_processing", ">= 1.2"
