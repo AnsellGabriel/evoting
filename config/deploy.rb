@@ -17,6 +17,37 @@ set :rbenv_type, :user #
 set :rbenv_ruby, "3.2.2" #
 set :rbenv_path, "/home/deploy/.rbenv" #
 
+# Configure mysql2 build options for production server
+# This helps mysql2 find MySQL development libraries on the server
+before 'bundler:install', 'bundler:config_mysql2'
+
+namespace :bundler do
+  desc 'Configure mysql2 build options to find MySQL libraries'
+  task :config_mysql2 do
+    on roles(:app) do
+      within release_path do
+        # Try to configure mysql2 to find MySQL libraries
+        # First try with mysql_config if available
+        mysql_config_path = capture("which mysql_config 2>/dev/null || echo ''").strip
+        if mysql_config_path && !mysql_config_path.empty?
+          info "Configuring mysql2 with mysql_config: #{mysql_config_path}"
+          execute :bundle, "config build.mysql2 --with-mysql-config=#{mysql_config_path}"
+        elsif test("[ -d /usr/include/mysql ]")
+          info "Configuring mysql2 with MySQL libraries in /usr"
+          execute :bundle, "config build.mysql2 --with-mysql-dir=/usr"
+        else
+          warn "WARNING: MySQL development libraries may not be installed on the server."
+          warn "Please install MySQL development libraries:"
+          warn "  Ubuntu/Debian: sudo apt-get install libmysqlclient-dev"
+          warn "  CentOS/RHEL: sudo yum install mariadb-devel"
+          warn "Attempting to build mysql2 with default configuration..."
+          execute :bundle, "config build.mysql2 --with-mysql-dir=/usr"
+        end
+      end
+    end
+  end
+end
+
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "vendor/bundle", ".bundle", "public/system", "public/uploads"
 
 # append :linked_files,  'config/credentials/production.key'
