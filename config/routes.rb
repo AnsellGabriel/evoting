@@ -5,10 +5,10 @@
 
   devise_for :users
   resources :votes do
-    get "save_vote", to: "votes#save_vote", on: :collection
+    post "save_vote", to: "votes#save_vote", on: :collection
     get "vote_review", to: "votes#vote_review", on: :collection
     get "vote_check", to: "votes#vote_check", on: :collection
-    get "vote_final", to: "votes#vote_final", on: :collection
+    post "vote_final", to: "votes#vote_final", on: :collection
     get "vote_success", to: "votes#vote_success", on: :collection
     get "result", to: "votes#result", on: :collection
     get "vote_all", to: "votes#vote_all", on: :collection

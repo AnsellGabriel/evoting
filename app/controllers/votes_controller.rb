@@ -162,6 +162,7 @@ class VotesController < ApplicationController
         @vote_update.update_all(post: 1)
         redirect_to vote_success_votes_path
       end
+
     end
   end
 
