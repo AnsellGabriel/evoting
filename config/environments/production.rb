@@ -20,6 +20,17 @@ Rails.application.configure do
   # or in config/master.key. This key is used to decrypt credentials (and other encrypted files).
   config.require_master_key = true
 
+  # Use ENV or config/secrets.yml for secret_key_base (Passenger doesn't get Capistrano's default_env)
+  # if ENV["SECRET_KEY_BASE"].present?
+  #   config.secret_key_base = ENV["SECRET_KEY_BASE"]
+  # else
+  #   secrets_file = Rails.root.join("config", "secrets.yml")
+  #   if File.exist?(secrets_file)
+  #     secrets = YAML.load_file(secrets_file)
+  #     config.secret_key_base = secrets.dig(Rails.env, "secret_key_base")&.to_s&.strip
+  #   end
+  # end
+
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
   config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
