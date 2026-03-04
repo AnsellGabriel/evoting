@@ -17,6 +17,10 @@ set :rbenv_type, :user #
 set :rbenv_ruby, "3.2.2" #
 set :rbenv_path, "/home/deploy/.rbenv" #
 
+set :default_env, {
+  'SECRET_KEY_BASE' => '4b2c0e51a12a4406b1bfd55ab452771a8db564b5240e84020a0658f39e7e5046a074f96490116ebe3e32e7a81c52d974959b7fcb27f7eda2a3dc390d3cbd8b70'
+}
+
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "vendor/bundle", ".bundle", "public/system", "public/uploads"
 
 # append :linked_files,  'config/credentials/production.key'
