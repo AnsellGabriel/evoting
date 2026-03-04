@@ -10,6 +10,9 @@
     <%= link_to download_members_path(format: :csv), class: "btn btn-outline-secondary" do %>
       <i class="bi bi-download"></i> Download CSV
     <% end %>
+    <%= link_to clear_members_members_path, class: "btn btn-danger", data: { turbo_confirm: "Are you sure you want to clear all members?" } do %>
+      <i class="bi bi-trash"></i> Clear Members
+    <% end %>
   </div>
 </div>
 
@@ -55,6 +58,18 @@
       </div>
     <% end %>
   </div>
+</div>
+
+<div class="mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+  <p class="text-muted mb-0 small">
+    <% if @pagy.count == 0 %>
+      No members
+    <% elsif @pagy.pages > 1 %>
+      Showing <%= @pagy.offset + 1 %>–<%= [@pagy.offset + @pagy.items, @pagy.count].min %> of <%= @pagy.count %> member<%= "s" unless @pagy.count == 1 %>
+    <% else %>
+      <%= @pagy.count %> member<%= "s" unless @pagy.count == 1 %>
+    <% end %>
+  </p>
 </div>
 
 <%= turbo_frame_tag :result do %>
@@ -122,6 +137,9 @@
                       <% end %>
                       <%= link_to member, class: "btn btn-outline-danger", method: :delete, data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" }, title: "Delete" do %>
                         <i class="bi bi-trash"></i>
+                      <% end %>
+                      <%= link_to cancel_vote_member_path(member), class: "btn btn-outline-warning", method: :post, data: { turbo_confirm: "Are you sure you want to cancel the member's votes?" }, title: "Cancel Vote" do %>
+                        <i class="bi bi-x-circle"></i>
                       <% end %>
                     </div>
                   </td>

@@ -2,8 +2,26 @@ class MembersController < ApplicationController
   # before_action :authenticate_user!
   include Pagy::Backend
   # before_action :authenticate_user!
-  before_action :set_member, only: %i[ show edit update destroy cancel_vote add_vote ]
+  before_action :set_member, only: %i[ show edit update destroy cancel_vote add_vote  ]
 
+
+  def cancel_vote
+    respond_to do |format|
+      if @member.update(voted: 0)
+        member_vote = Vote.where(member: @member)
+        member_vote.update(post: false)
+        member_ref = ReferendumResponse.where(member: @member)
+        member_ref.destroy_all
+        format.html { redirect_to members_path, notice: "Member was votes canceled." }
+        format.json { render :show, status: :ok, location: @member }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @member.errors, status: :unprocessable_entity }
+        format.turbo_stream { render :form_update, status: :unprocessable_entity }
+      end
+    end
+  end
+  
   def download
     @members = @my_event.members.order(:name)
     respond_to do |format|
@@ -45,6 +63,11 @@ class MembersController < ApplicationController
       flash[:alert] = @vote.errors.full_messages.join(", ") # Collects all validation errors
       redirect_to page_vote_url(i: @member, p: @candidate.position)
     end
+  end
+
+  def clear_members
+    @my_event.members.destroy_all
+    redirect_to members_path, notice: "Members were successfully cleared."
   end
 
   # GET /members or /members.json
@@ -104,22 +127,7 @@ class MembersController < ApplicationController
     end
   end
 
-  def cancel_vote
-    respond_to do |format|
-      if @member.update(voted: 0)
-        member_vote = Vote.where(member: @member)
-        member_vote.destroy_all
-        member_ref = ReferendumResponse.where(member: @member)
-        member_ref.destroy_all
-        format.html { redirect_to members_path, notice: "Member was votes canceled." }
-        format.json { render :show, status: :ok, location: @member }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @member.errors, status: :unprocessable_entity }
-        format.turbo_stream { render :form_update, status: :unprocessable_entity }
-      end
-    end
-  end
+  
 
   # DELETE /members/1 or /members/1.json
   def destroy

@@ -1,27 +1,34 @@
-<div class="container flex" style="height: 100vh;">
-  <div class="card" style= "max-width: 600px;">
-    <% #= image_tag 'cooptechlogo.png', width: 200, class: 'mb-2 mb-lg-0 me-2' %>
-    <div class="card-body">
-    <%= image_tag "cooptechlogo.png", width: 130, class: "mb-2 mb-lg-0 me-2 mt-3" %>
+<div class="voter-code-page">
+  <div class="voter-code-card">
+    <div class="voter-code-card__header">
+      <%= image_tag "evoting.png", class: "voter-code-card__logo", alt: "e-Voting" %>
+      <h1 class="voter-code-card__event-name"><%= @my_event.name %></h1>
+    </div>
+
+    <div class="voter-code-card__body">
+      <p class="voter-code-card__title">Enter your voter code to cast your vote</p>
+
       <%= simple_form_for @election, url: enter_code_path(p: params[:p]), method: :post do |f| %>
         <%= f.error_notification %>
         <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
-        <div class="form-inputs mb-5" style="text-align: center;">
-          <div class="form-inputs mb-3">
-            <%= @my_event.name %>
-            <% if current_user %>
-              <%= f.association :member,
-                                collection: @my_event.members,
-                                label: "Member",
-                                error: "*Required",
-                                input_html: { data: { controller: "ts--select" } } %>
-            
-            <% end %>
-            <%= f.input :voter_code, label: "Enter your voter code", input_html: { style: "text-align: center;" } %>
-          </div>
-          <div class="form-actions text-end">
-            <%= f.button :submit, class: "btn btn-success btn-lg", value: "Enter" %>
-          </div>
+
+        <div class="form-inputs">
+          <% if current_user %>
+            <%= f.association :member,
+                              collection: @my_event.members,
+                              label: "Member",
+                              error: "*Required",
+                              input_html: { data: { controller: "ts--select" } } %>
+          <% end %>
+
+          <%= f.input :voter_code,
+                      label: "Voter code",
+                      placeholder: "Enter code",
+                      input_html: { style: "text-align: center;", autocomplete: "off" } %>
+        </div>
+
+        <div class="form-actions">
+          <%= f.button :submit, class: "btn btn-success btn-submit", value: "Continue" %>
         </div>
       <% end %>
     </div>

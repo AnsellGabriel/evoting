@@ -22,6 +22,8 @@
     get :add_vote, on: :member
     post :import, on: :collection
     get :download, on: :collection
+    get :clear_members, on: :collection
+    post :cancel_vote, on: :member
   end
   resources :positions
   resources :events do

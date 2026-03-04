@@ -27,9 +27,11 @@ class Member < ApplicationRecord
   private 
 
   def generate_vote_code
-    code = SecureRandom.alphanumeric(4).upcase
-    modified_string = code.gsub(/[1iO0I]/, "A")
-    self.vote_code = modified_string
+    if self.vote_code.blank?
+      code = SecureRandom.alphanumeric(4).upcase
+      modified_string = code.gsub(/[1iO0I]/, "A")
+      self.vote_code = modified_string
+    end
   end
 
   def default_values 

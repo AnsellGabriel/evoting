@@ -7,7 +7,7 @@ class PagesController < ApplicationController
         redirect_to events_path
       end
     else
-      @events = Event.where(active: 1)
+      @event = @my_event
     end
   end
 

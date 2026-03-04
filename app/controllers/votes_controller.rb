@@ -5,7 +5,7 @@ class VotesController < ApplicationController
   
     pdf = ResultPdf.new(@my_event, view_context)
     # pdf.text "Hello World"
-    send_data(pdf.render, filename: "#{@my_event.name}_voters_list.pdf", type: "application/pdf", disposition: "inline")
+    send_data(pdf.render, filename: "#{@my_event.name}_result.pdf", type: "application/pdf", disposition: "inline")
   end 
   # GET /votes or /votes.json
   def index
