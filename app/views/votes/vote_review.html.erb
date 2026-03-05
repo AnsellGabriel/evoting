@@ -6,7 +6,14 @@
 </div>
 <div class="text-end mb-3">
   <% unless @member.voted.present? || @member.voted? %>
-    <%= button_to vote_final_votes_path(m: @member), method: :post, class: "btn btn-success btn-lg", form: { data: { turbo_confirm: "Are you sure you want to save your votes? This action cannot be undone." } } do %>
+    <%
+=begin%>
+ # form: { data: { turbo_confirm: "Are you sure you want to save your votes? This action cannot be undone." } },
+    # data: { turbo_method: :post, turbo_confirm: "Are you sure you want to save your votes? This action cannot be undone." } do %> 
+<%
+=end%>
+    <%= button_to vote_final_votes_path(m: @member), method: :post, 
+    class: "btn btn-success btn-lg" do %>
       <i class="bi bi-box-seam"></i> Save Votes
     <% end %>
   <% end %>
