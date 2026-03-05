@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_event, only: %i[ show edit update destroy activate ]
+  before_action :set_event, only: %i[ show edit update destroy activate generate_vote_record reset_election ]
 
   def activate
     Event.update(active: 0, election: 0)
@@ -11,6 +11,22 @@ class EventsController < ApplicationController
       notice = "Event Deactivated"
     end
     return redirect_to events_url, notice: "Event Activated"
+  end
+
+  def reset_election
+    @event.reset_election
+    return redirect_to @event, notice: "Election Reset"
+  end
+
+  def generate_vote_record
+    @votes = @event.votes.all
+    respond_to do |format|
+      format.csv do
+        send_data @event.cast_vote_record(@votes),
+                  filename: "cast_vote_record-#{Date.today}.csv"
+      end
+      format.html { redirect_to @event }
+    end
   end
 
   # GET /events or /events.json

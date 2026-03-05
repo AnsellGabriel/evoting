@@ -4,8 +4,8 @@ class Vote < ApplicationRecord
   belongs_to :member
   belongs_to :position
 
-  validate :validate_vote
   validates :candidate, uniqueness: { scope: :member_id }
+  validate :validate_vote
 
   def validate_vote
     @count_vote = Vote.where(position_id: position_id, member: member_id).count

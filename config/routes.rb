@@ -28,6 +28,8 @@
   resources :positions
   resources :events do
     get :activate, on: :member
+    get :generate_vote_record, on: :member
+    get :reset_election, on: :member
   end
   resources :referendum_responses
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

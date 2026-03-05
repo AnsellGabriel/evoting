@@ -1,58 +1,161 @@
-<div class="card mb-3">
-  <div class="card-header">
-    Event
-    <%= link_to "Delete", event, class: "btn btn-danger btn-sm", method: :delete, data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>
+<div class="card mb-3 shadow-sm">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-2">
+      <i class="bi bi-calendar-event text-primary me-2"></i>
+      <div>
+        <h5 class="mb-0"><%= event.name %></h5>
+        <small class="text-muted">Event details & configuration</small>
+      </div>
+      <% if event.respond_to?(:election) %>
+        <% if event.election %>
+          <span class="badge bg-success ms-2">Election event</span>
+        <% else %>
+          <span class="badge bg-secondary ms-2">Standard event</span>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="btn-group btn-group-sm">
+      <%= link_to edit_event_path(@event), class: "btn btn-outline-secondary btn-sm" do %>
+        <i class="bi bi-pencil-square me-1"></i>
+        Edit
+      <% end %>
+      <% if event.election == false %>
+        <%= link_to reset_election_event_path(event), 
+        class: "btn btn-outline-danger btn-sm",
+        data: { turbo_method: :get, turbo_confirm: "Are you sure?" } do %>
+          <i class="bi bi-arrow-repeat me-1"></i>
+          Reset Election
+        <% end %>
+        <%= link_to generate_vote_record_event_path(event, format: :csv),
+                    class: "btn btn-outline-danger",
+                    data: { turbo_method: :get, turbo_confirm: "Are you sure?" } do %>
+          <i class="bi bi-file-earmark-arrow-down me-1"></i>
+          Generate Vote Record
+        <% end %>
+      <% end %>
+
+      <%= link_to event,
+                  class: "btn btn-outline-danger",
+                  method: :delete,
+                  data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } do %>
+        <i class="bi bi-trash"></i>
+      <% end %>
+    </div>
   </div>
+
   <div class="card-body">
-    <div class="row">
+    <div class="row g-4">
       <div class="col-md-6">
         <div id="<%= dom_id event %>">
-          <p>
-            <strong>Name:</strong>
-            <%= event.name %>
+          <p class="mb-1 text-muted text-uppercase small">Description</p>
+          <p class="mb-3">
+            <% if event.description.present? %>
+              <%= event.description %>
+            <% else %>
+              <span class="text-muted fst-italic">No description provided</span>
+            <% end %>
           </p>
-          <p>
-            <%= event.description %>
-          </p>
-          <div class="alert alert-primary" role="alert">
-            <%= content_tag :h5, "Members #{to_curr(@event.members.count)}" %>
+
+          <div class="alert alert-primary d-flex justify-content-between align-items-center mb-0" role="alert">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-people-fill me-2"></i>
+              <strong class="mb-0">Members</strong>
+            </div>
+            <span class="badge bg-light text-primary ms-2">
+              <%= to_curr(@event.members.count) %>
+            </span>
+          </div>
+          <div class="alert alert-light d-flex justify-content-between align-items-center mb-0" role="alert">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-people-fill me-2"></i>
+              <strong class="mb-0">Voted Members</strong>
+            </div>
+            <span class="badge bg-light text-primary ms-2">
+              <%= to_curr(@event.members.where(voted: true).count) %>
+            </span>
+          </div>
+          <div class="alert alert-light d-flex justify-content-between align-items-center mb-0" role="alert">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-people-fill me-2"></i>
+              <strong class="mb-0">Election</strong>
+            </div>
+            <span class="badge bg-light text-primary ms-2">
+              <%= @event.election ? "Open" : "Closed" %>
+            </span>
+          </div>
+          <div class="alert alert-light d-flex justify-content-between align-items-center mb-0" role="alert">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-people-fill me-2"></i>
+              <strong class="mb-0">Election Rules</strong>
+            </div>
+            <span class="badge bg-light text-primary ms-2">
+              <%= "Required Complete" if @event.required_complete %>
+              <%= "Single Vote Disable" if @event.allow_single %>
+              <%= "Minimum Vote per candidate" if @event.min_vote %>
+            </span>
           </div>
         </div>
       </div>
+
       <div class="col-md-6">
-      </div>
-      <div class="col-md-6">
-        <div class="row">
-          <div class="col-6">
-            <h5 class="text-primary">Election vacant position(s)</h5>
+        <div class="row g-3">
+          <div class="col-12">
+            <div class="card h-100">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <span class="fw-semibold text-primary">
+                  <i class="bi bi-briefcase me-2"></i>
+                  Election vacant position(s)
+                </span>
+                <%= link_to "New Position",
+                            new_position_path(v: @event),
+                            class: "btn btn-sm btn-outline-primary",
+                            data: { turbo_frame: "remote_modal" } %>
+              </div>
+              <div class="card-body p-3">
+                <%= render "positions/show_position", event: @event %>
+              </div>
+            </div>
           </div>
-          <div class="col-6">
-            <div class="text-end">
-              <%= link_to "New Position", new_position_path(v: @event), class: "btn btn-primary", data: { turbo_frame: "remote_modal" } %>
+
+          <div class="col-12">
+            <div class="card h-100">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <span class="fw-semibold text-primary">
+                  <i class="bi bi-person-badge me-2"></i>
+                  Election candidates
+                </span>
+                <%= link_to "New Candidate",
+                            new_candidate_path(v: @event),
+                            class: "btn btn-sm btn-outline-primary",
+                            data: { turbo_frame: "remote_modal" } %>
+              </div>
+              <div class="card-body p-3">
+                <%= render "candidates/show_candidate" %>
+              </div>
             </div>
           </div>
         </div>
-        <br>
-        <%= render "positions/show_position", event: @event %>
-      </div>
-      <div class="col-md-6">
-        <div class="row">
-          <div class="col-6">
-            <h5 class="text-primary">Election candidates</h5>
-          </div>
-          <div class="col-6">
-            <div class="text-end">
-              <%= link_to "New Candidate", new_candidate_path(v: @event), class: "btn btn-primary", data: { turbo_frame: "remote_modal" } %>
-            </div>
-          </div>
-        </div>
-        <br>
-        <%= render "candidates/show_candidate" %>
       </div>
     </div>
   </div>
-  <div class="card-footer">
-    <%= link_to "Edit", edit_event_path(@event), class: "btn btn-secondary btn-sm" %> |
-    <%= link_to "Back", events_path, class: "btn btn-secondary btn-sm" %>
+
+  <div class="card-footer d-flex justify-content-between align-items-center">
+    <small class="text-muted">
+      <% if @event.respond_to?(:updated_at) && @event.updated_at.present? %>
+        Last updated
+        <%= l(@event.updated_at, format: :short) rescue @event.updated_at.to_s %>
+      <% end %>
+    </small>
+    <div class="d-flex gap-2">
+      <%= link_to edit_event_path(@event), class: "btn btn-outline-secondary btn-sm" do %>
+        <i class="bi bi-pencil-square me-1"></i>
+        Edit
+      <% end %>
+      <%= link_to events_path, class: "btn btn-secondary btn-sm" do %>
+        <i class="bi bi-arrow-left-circle me-1"></i>
+        Back
+      <% end %>
+    </div>
   </div>
 </div>
