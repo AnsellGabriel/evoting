@@ -2,10 +2,10 @@
 lock "~> 3.20.0"
 
 # set :application, "evoting"
-set :application, "e-voting"
+# set :application, "e-voting"
 # set :application, "coop_tech"
 # set :application, "sacred_heart"
-# set :application, "st_vincent"
+set :application, "st_vincent"
 set :repo_url, "git@github.com:AnsellGabriel/evoting.git"
 set :rails_env, "production" #
 set :branch, "main" #
