@@ -1,5 +1,8 @@
 class PagesController < ApplicationController
   def home
+    if current_user&.graph_only?
+      redirect_to results_graph_votes_path and return
+    end
     if @my_event.nil?
       if current_user.nil?
         redirect_to new_user_session_path

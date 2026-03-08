@@ -4,6 +4,11 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :set_event
 
+  def after_sign_in_path_for(resource)
+    return results_graph_votes_path if resource.is_a?(User) && resource.graph_only?
+    super
+  end
+
   private
 
   def set_event
