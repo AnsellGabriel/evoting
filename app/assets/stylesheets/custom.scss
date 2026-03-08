@@ -450,3 +450,119 @@ body {
   font-size: 0.875rem;
   border-radius: 8px;
 }
+
+// Results graph page
+.results-graph {
+  padding-bottom: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.results-graph__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.results-graph__title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.results-graph__stat {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border: 1px solid #a7f3d0;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(16, 185, 129, 0.08);
+}
+
+.results-graph__stat-icon {
+  font-size: 1.5rem;
+  color: #059669;
+  line-height: 1;
+}
+
+.results-graph__stat-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.125rem;
+}
+
+.results-graph__stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #065f46;
+  line-height: 1.2;
+}
+
+.results-graph__stat-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #047857;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.results-graph__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+.results-graph__card-wrapper {
+  min-width: 0;
+}
+
+.results-graph__card-wrapper--wide {
+  grid-column: 1 / -1;
+}
+
+.results-graph__card {
+  height: 100%;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.results-graph__card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-color: #d1d5db;
+}
+
+.results-graph__card-title {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e40af;
+  background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.results-graph__card-body {
+  padding: 1.25rem;
+}
+
+.results-graph__chart {
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

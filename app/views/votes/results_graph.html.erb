@@ -1,33 +1,52 @@
+<%
+  chart_options = {
+    height: "280px",
+    colors: ["#0ea5e9", "#8b5cf6", "#f59e0b", "#10b981", "#ef4444", "#6366f1", "#ec4899"],
+    library: {
+      chart: { borderRadius: 6 },
+      bar: { groupWidth: "70%" },
+      legend: { position: "none" },
+      vAxis: { minValue: 0, format: "0" },
+      backgroundColor: "transparent",
+      theme: "material"
+    }
+  }
+%>
 <%= turbo_frame_tag :occuring, data: { controller: "occuring" } do %>
+  <div class="results-graph">
+    <header class="results-graph__header">
+      <h1 class="results-graph__title"><%= @event.name %></h1>
+      <div class="results-graph__stat">
+        <span class="results-graph__stat-icon"><i class="bi bi-check2-circle" aria-hidden="true"></i></span>
+        <div class="results-graph__stat-content">
+          <span class="results-graph__stat-value"><%= to_curr(@member.where(voted: 1).count) %></span>
+          <span class="results-graph__stat-label">Members have voted</span>
+        </div>
+      </div>
+    </header>
 
-    <div class="mb-5">
-        <% #= column_chart @graph %>
-        <%= content_tag :h3, @event.name %> 
-    </div>
-    <div class="alert alert-success" role="alert">
-       <strong></strong> <h3><i class="bi bi-receipt-cutoff"></i>      Members have already voted: <%= to_curr(@member.where(voted: 1).count) %></h3>
-    </div>
-    <div class="mb-3">
-        <% #= column_chart @graph_with_name %>
-            <div class="row">
-                <% @positions.each do |pos| %>
-                    <div class="<%= "col-md-6" unless pos.id == 1 %>">
-                        <div class="card mb-3">
-                            <%= content_tag :h4, pos.name, class: "card-header text-primary" %>
-                            <div class="card-body">
-                                <% @vote = Vote.joins(:candidate).group("candidates.name").where(position: pos, post: 1, event: @my_event).count("id") %>
-                                <% results = Vote.group(:candidate_id).where(position: pos, post: 1, event: @my_event).count %>
-                                <% @graph = results.map { |candidate, count| [candidate, count] } %>
-                                <% # results_with_name = Vote.joins(:candidate).group('candidates.name').count %>
-                                <% @graph_with_name = @vote.map { |candidate_name, count| [candidate_name, count] } %>
+    <div class="results-graph__cards">
+      <% @positions.each do |pos| %>
+        <div class="results-graph__card-wrapper <%= "results-graph__card-wrapper--wide" if pos.id == 1 %>">
+          <article class="results-graph__card">
+            <h2 class="results-graph__card-title"><%= pos.name %></h2>
+            <div class="results-graph__card-body">
+              <% @vote = Vote.joins(:candidate).group("candidates.name").where(position: pos, post: 1, event: @my_event).count("id") %>
+              <% results = Vote.group(:candidate_id).where(position: pos, post: 1, event: @my_event).count %>
+              <% @graph = results.map { |candidate, count| [candidate, count] }.sort_by { |_, count| -count } %>
+              <% @graph_with_name = @vote.map { |candidate_name, count| [candidate_name, count] }.sort_by { |_, count| -count } %>
 
-                                <%= column_chart @graph_with_name unless @event.election? %>
-                                <%= column_chart @graph if @event.election? %>
-                            </div>
-                        </div>
-                    </div>
+              <div class="results-graph__chart">
+                <% if @event.election? %>
+                  <%= column_chart @graph, **chart_options %>
+                <% else %>
+                  <%= column_chart @graph_with_name, **chart_options %>
                 <% end %>
+              </div>
             </div>
+          </article>
+        </div>
+      <% end %>
     </div>
-    <p>Loading</p>
- <% end %>
+  </div>
+<% end %>
