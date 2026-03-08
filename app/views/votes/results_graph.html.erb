@@ -27,7 +27,7 @@
 
     <div class="results-graph__cards">
       <% @positions.each do |pos| %>
-        <div class="results-graph__card-wrapper <%= "results-graph__card-wrapper--wide" if pos.id == 1 %>">
+        <div class="results-graph__card-wrapper results-graph__card-wrapper--wide" >
           <article class="results-graph__card">
             <h2 class="results-graph__card-title"><%= pos.name %></h2>
             <div class="results-graph__card-body">
