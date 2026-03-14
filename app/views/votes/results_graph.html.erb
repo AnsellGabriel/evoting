@@ -12,41 +12,47 @@
     }
   }
 %>
-<%= turbo_frame_tag :occuring, data: { controller: "occuring" } do %>
-  <div class="results-graph">
-    <header class="results-graph__header">
-      <h1 class="results-graph__title"><%= @event.name %></h1>
-      <div class="results-graph__stat">
-        <span class="results-graph__stat-icon"><i class="bi bi-check2-circle" aria-hidden="true"></i></span>
-        <div class="results-graph__stat-content">
-          <span class="results-graph__stat-value"><%= to_curr(@member.where(voted: 1).count) %></span>
-          <span class="results-graph__stat-label">Members have voted</span>
+
+  <%= turbo_frame_tag :occuring, data: { controller: "occuring" } do %>
+    <div class="results-graph">
+      <header class="results-graph__header">
+        <h1 class="results-graph__title"><%= @event.name %></h1>
+        <div class="results-graph__stat">
+          <span class="results-graph__stat-icon"><i class="bi bi-check2-circle" aria-hidden="true"></i></span>
+          <div class="results-graph__stat-content">
+            <span class="results-graph__stat-value"><%= to_curr(@member.where(voted: 1).count) %></span>
+            <span class="results-graph__stat-label">Members have voted</span>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+      <% if @event.election == false && current_user.graph_only? %>
+        <div class="alert alert-danger" role="alert">
+          <i class="bi bi-exclamation-circle me-2"></i>Election is not active.
+        </div>
+      <% else %>
+        <div class="results-graph__cards">
+          <% @positions.each do |pos| %>
+            <div class="results-graph__card-wrapper results-graph__card-wrapper--wide" >
+              <article class="results-graph__card">
+                <h2 class="results-graph__card-title"><%= pos.name %></h2>
+                <div class="results-graph__card-body">
+                  <% @vote = Vote.joins(:candidate).group("candidates.name").where(position: pos, post: 1, event: @my_event).count("id") %>
+                  <% results = Vote.group(:candidate_id).where(position: pos, post: 1, event: @my_event).count %>
+                  <% @graph = results.map { |candidate, count| [candidate, count] }.sort_by { |_, count| -count } %>
+                  <% @graph_with_name = @vote.map { |candidate_name, count| [candidate_name, count] }.sort_by { |_, count| -count } %>
 
-    <div class="results-graph__cards">
-      <% @positions.each do |pos| %>
-        <div class="results-graph__card-wrapper results-graph__card-wrapper--wide" >
-          <article class="results-graph__card">
-            <h2 class="results-graph__card-title"><%= pos.name %></h2>
-            <div class="results-graph__card-body">
-              <% @vote = Vote.joins(:candidate).group("candidates.name").where(position: pos, post: 1, event: @my_event).count("id") %>
-              <% results = Vote.group(:candidate_id).where(position: pos, post: 1, event: @my_event).count %>
-              <% @graph = results.map { |candidate, count| [candidate, count] }.sort_by { |_, count| -count } %>
-              <% @graph_with_name = @vote.map { |candidate_name, count| [candidate_name, count] }.sort_by { |_, count| -count } %>
-
-              <div class="results-graph__chart">
-                <% if @event.election? %>
-                  <%= column_chart @graph, **chart_options %>
-                <% else %>
-                  <%= column_chart @graph_with_name, **chart_options %>
-                <% end %>
-              </div>
+                  <div class="results-graph__chart">
+                    <% if @event.election? %>
+                      <%= column_chart @graph, **chart_options %>
+                    <% else %>
+                      <%= column_chart @graph_with_name, **chart_options %>
+                    <% end %>
+                  </div>
+                </div>
+              </article>
             </div>
-          </article>
+          <% end %>
         </div>
       <% end %>
     </div>
-  </div>
-<% end %>
+  <% end %>

@@ -8,11 +8,9 @@ class MembersController < ApplicationController
   def cancel_vote
     respond_to do |format|
       if @member.update(voted: 0)
-        member_vote = Vote.where(member: @member)
-        member_vote.update(post: false)
-        member_ref = ReferendumResponse.where(member: @member)
-        member_ref.destroy_all
-        format.html { redirect_to members_path, notice: "Member was votes canceled." }
+        @member.votes.destroy_all
+        @member.referendum_responses.destroy_all
+        format.html { redirect_to members_path, notice: "Member's votes and referendum responses were successfully canceled." }
         format.json { render :show, status: :ok, location: @member }
       else
         format.html { render :edit, status: :unprocessable_entity }

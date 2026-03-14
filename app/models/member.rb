@@ -1,7 +1,9 @@
 class Member < ApplicationRecord
   belongs_to :event
   belongs_to :user, optional: true
-  has_many :votes
+  has_many :votes, dependent: :destroy
+  has_many :referendum_responses, dependent: :destroy
+
 
   before_validation :generate_vote_code, :default_values, on: :create
   validates :vote_code, uniqueness: { scope: :event_id }
