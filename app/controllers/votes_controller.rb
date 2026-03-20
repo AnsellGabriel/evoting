@@ -154,13 +154,13 @@ class VotesController < ApplicationController
       if @member.update!(voted: 1, vote_date: Time.now, user_id: current_user.id)
         @vote_update = Vote.where(member: @member)
         @vote_update.update_all(post: 1)
-        redirect_to vote_success_votes_path
+        redirect_to vote_success_votes_path(m: @member)
       end
     else
       if @member.update!(voted: 1, vote_date: Date.today)
         @vote_update = Vote.where(member: @member)
         @vote_update.update_all(post: 1)
-        redirect_to vote_success_votes_path
+        redirect_to vote_success_votes_path(m: @member)
       end
 
     end
@@ -168,6 +168,12 @@ class VotesController < ApplicationController
 
   def vote_success
     @event = Event.find_by(active: 1)
+    @member =
+      if params[:m].present? && @event.present?
+        @event.members.find_by(id: params[:m])
+      else
+        Member.find_by(id: params[:m])
+      end
   end
 
   def result
